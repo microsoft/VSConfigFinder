@@ -1,18 +1,19 @@
 ﻿namespace VSConfigFinder
 {
-    internal class CommandLineOptions : ICommandLineOptions
+    using CommandLine;
+
+    /// <inheritdoc/>
+    public class CommandLineOptions : ICommandLineOptions
     {
-        public CommandLineOptions(string filePath, string output)
-        {
-            Utilities.ValidateIsNotNullOrEmpty(filePath, nameof(filePath));
-            Utilities.ValidateOutputParameter(output, nameof(output));
+        /// <inheritdoc/>
+        [Option("folderpath", Required = true, HelpText = "Set the source folder path to use as the root. The search will start from the root towards the bottom.")]
+        public string FolderPath { get; set; }
 
-            FilePath = filePath;
-            Output = output;
-        }
-
-        public string FilePath { get; set; }
-
-        public string Output { get; set; }
+        /// <inheritdoc/>
+        [Option("createfile", Required = false, HelpText = "Set the folder path to output the consolidated .vsconfig.\n" +
+            "If the argument (--createfile) is not passed at all, the program will output the cli arguments that can be fed into the Visual Studio Installer setup arguments. (e.g. --add --add Microsoft.VisualStudio.Component.Roslyn.Compiler --add Microsoft.Net.Component.4.8.SDK\n" +
+            "If the argument is passed without a following folder path, the program will create and output the final .vsconfig into the current directory.\n" +
+            "If the argument is passed with a following folder path, the program will create and output the final .vsconfig into the specified folder path that is followed by --createFile.")]
+        public string? CreateFile { get; set; }
     }
 }

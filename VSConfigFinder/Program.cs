@@ -1,11 +1,38 @@
-﻿internal class Program
+﻿namespace VSConfigFinder
 {
-    private static void Main(string[] args)
+    using CommandLine;
+
+    /// <summary>
+    /// <see cref="Program"/> class for the .vsconfig finder tool.
+    /// </summary>
+    public class Program
     {
-        // Take in the command line arguments
+        /// <summary>
+        /// Main entry point of the tool.
+        /// </summary>
+        /// <param name="args">The program arguments</param>
+        public static void Main(string[] args)
+        {
+            var parser = new Parser(with =>
+            {
+                with.CaseSensitive = false;
+            });
 
-        // Create a runner
+            // Take in the command line arguments
+            parser.ParseArguments<CommandLineOptions>(args)
+                .WithParsed(Run)
+                .WithNotParsed(HandleParseError);
+        }
 
-        // Run and output
+        private static void Run(CommandLineOptions options)
+        {
+            Console.WriteLine("Hello! I succeeded!");
+            Console.WriteLine($"--createFile: {options.CreateFile}");
+        }
+
+        private static void HandleParseError(IEnumerable<Error> errors)
+        {
+            Console.WriteLine("Oops, failed");
+        }
     }
 }

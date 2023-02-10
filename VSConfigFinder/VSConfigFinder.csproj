@@ -15,4 +15,8 @@
     <None Include="C:\Users\sknam\source\repos\VSConfigFinder\VSConfigFinder\.editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+  </ItemGroup>
+
 </Project>
