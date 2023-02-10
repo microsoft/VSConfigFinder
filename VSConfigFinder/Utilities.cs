@@ -1,7 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿// <copyright file="Utilities.cs" company="Microsoft Corporation">
+// Copyright (C) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+// </copyright>
 
 namespace VSConfigFinder
 {
+    using System.Diagnostics.CodeAnalysis;
+
     internal class Utilities
     {
         private static readonly string[] AcceptedOutputOptions = new[] { "config", "commandline" };

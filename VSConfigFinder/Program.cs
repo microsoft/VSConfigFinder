@@ -1,6 +1,12 @@
-﻿namespace VSConfigFinder
+﻿// <copyright file="Program.cs" company="Microsoft Corporation">
+// Copyright (C) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+// </copyright>
+
+namespace VSConfigFinder
 {
     using CommandLine;
+    using System.IO;
 
     /// <summary>
     /// <see cref="Program"/> class for the .vsconfig finder tool.
@@ -28,6 +34,12 @@
         {
             Console.WriteLine("Hello! I succeeded!");
             Console.WriteLine($"--createFile: {options.CreateFile}");
+            Console.WriteLine($"--configOutputPath: {options.ConfigOutputPath}");
+
+            if (options.CreateFile)
+            {
+                options.ConfigOutputPath ??= Directory.GetCurrentDirectory();
+            }
         }
 
         private static void HandleParseError(IEnumerable<Error> errors)
