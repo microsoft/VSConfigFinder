@@ -7,6 +7,7 @@ namespace VSConfigFinder
 {
     using CommandLine;
     using System.IO;
+    using System.Text.Json;
 
     /// <summary>
     /// <see cref="Program"/> class for the .vsconfig finder tool.
@@ -23,7 +24,7 @@ namespace VSConfigFinder
             {
                 with.CaseSensitive = false;
             });
-
+            
             // Take in the command line arguments
             parser.ParseArguments<CommandLineOptions>(args)
                 .WithParsed(Run)
@@ -32,19 +33,27 @@ namespace VSConfigFinder
 
         private static void Run(CommandLineOptions options)
         {
-            Console.WriteLine("Hello! I succeeded!");
-            Console.WriteLine($"--createFile: {options.CreateFile}");
-            Console.WriteLine($"--configOutputPath: {options.ConfigOutputPath}");
-
+            // Run
             if (options.CreateFile)
             {
                 options.ConfigOutputPath ??= Directory.GetCurrentDirectory();
             }
+
+            string[] allComponents = Utilities.ReadComponents(options); 
+
+            var finalConfig = new VSConfig()
+            {
+                Version = new Version("1.0"),
+                Components = allComponents,
+            };
+
+            // Output
+            Utilities.CreateOutput(finalConfig, options);
         }
 
         private static void HandleParseError(IEnumerable<Error> errors)
         {
-            Console.WriteLine("Oops, failed");
+            Console.WriteLine("Please make sure that you have provided the correct arguments. Try --help to see all the available arguments and explanations.");
         }
     }
 }

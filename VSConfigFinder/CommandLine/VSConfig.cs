@@ -10,7 +10,7 @@ namespace VSConfigFinder
     /// <summary>
     /// The class object that defines a .vsconfig file.
     /// </summary>
-    internal class VSConfig
+    public class VSConfig
     {
         /// <summary>
         /// Gets or sets the version of the .vsconfig file.
