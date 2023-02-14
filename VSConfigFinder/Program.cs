@@ -32,19 +32,32 @@ namespace VSConfigFinder
 
         private static void Run(CommandLineOptions options)
         {
-            Console.WriteLine("Hello! I succeeded!");
-            Console.WriteLine($"--createFile: {options.CreateFile}");
-            Console.WriteLine($"--configOutputPath: {options.ConfigOutputPath}");
-
+            // Run
             if (options.CreateFile)
             {
                 options.ConfigOutputPath ??= Directory.GetCurrentDirectory();
             }
+
+            // TODO: Replace this with the output from the runner
+            var finalConfig = new VSConfig()
+            {
+                Version = new Version("1.0"),
+                Components = new string[]
+                {
+                    "Microsoft.VisualStudio.Component.NuGet",
+                    "Microsoft.VisualStudio.Component.Roslyn.Compiler",
+                    "Microsoft.Component.MSBuild",
+                    "Microsoft.NetCore.Component.Runtime.6.0",
+                },
+            };
+
+            // Output
+            Utilities.CreateOutput(finalConfig, options);
         }
 
         private static void HandleParseError(IEnumerable<Error> errors)
         {
-            Console.WriteLine("Oops, failed");
+            Console.WriteLine("Please make sure that you have provided the correct arguments. Try --help to see all the available arguments and explanations.");
         }
     }
 }
