@@ -91,7 +91,7 @@ namespace VSConfigFinder
         /// <returns></returns>
         public static string[] ReadComponents(IFileSystem fileSystem, CommandLineOptions options)
         {
-            var pathsToVsConfigs = fileSystem.GetFileSystemEntries(options.FolderPath, ConfigExtension, recursive: true);
+            var pathsToVsConfigs = fileSystem.GetFileSystemEntries(options.FolderPath, "*" + ConfigExtension, recursive: true);
 
             var componentsSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             var serializerOptions = new JsonSerializerOptions
