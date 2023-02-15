@@ -9,17 +9,31 @@ namespace VSConfigFinder
     using System.Text;
     using System.Text.Json;
 
+    /// <summary>
+    /// Utilities class for the tool.
+    /// </summary>
     public class Utilities
     {
         private static readonly string ConfigExtension = ".vsconfig";
         private static readonly string Add = "--add";
 
+        /// <summary>
+        /// Validate whether the parameter is null or empty.
+        /// </summary>
+        /// <param name="s">The parameter.</param>
+        /// <param name="paramName">The nameof(parameter).</param>
         public static void ValidateIsNotNullOrEmpty([NotNull] string s, string paramName)
         {
             IsNotNull(s, paramName);
             IsNotEmpty(s, paramName);
         }
 
+        /// <summary>
+        /// Validate whether the parameter is null.
+        /// </summary>
+        /// <param name="o">The parameter object.</param>
+        /// <param name="paramName">The nameof(parameter).</param>
+        /// <exception cref="ArgumentNullException"><paramref name="o"/> is null.</exception>
         public static void IsNotNull([NotNull] object o, string paramName)
         {
             if (o is null)
@@ -28,6 +42,12 @@ namespace VSConfigFinder
             }
         }
 
+        /// <summary>
+        /// Validate whether the parameter is empty.
+        /// </summary>
+        /// <param name="s">The string parameter object.</param>
+        /// <param name="paramName">The nameof(parameter).</param>
+        /// <exception cref="ArgumentException"><paramref name="s"/> is empty.</exception>
         public static void IsNotEmpty([NotNull] string s, string paramName)
         {
             if (s == string.Empty)
@@ -36,7 +56,13 @@ namespace VSConfigFinder
             }
         }
 
-        public static void CreateOutput(VSConfig finalConfig, CommandLineOptions options)
+        /// <summary>
+        /// Create an output from the final <see cref="VSConfig"/> and given <see cref="CommandLineOptions"/>.
+        /// </summary>
+        /// <param name="fileSystem">The <see cref="IFileSystem"/>.</param>
+        /// <param name="finalConfig">The final <see cref="VSConfig"/> to export.</param>
+        /// <param name="options">The command line options.</param>
+        public static void CreateOutput(IFileSystem fileSystem, VSConfig finalConfig, CommandLineOptions options)
         {
             if (options.CreateFile)
             {
@@ -45,7 +71,7 @@ namespace VSConfigFinder
                 var jsonString = JsonSerializer.Serialize(finalConfig, serializerOptions);
                 var outputPath = Path.Combine(options.ConfigOutputPath!, ConfigExtension);
 
-                File.WriteAllText(outputPath, jsonString);
+                fileSystem.WriteAllText(outputPath, jsonString);
                 Console.WriteLine($"Successfully created the final .vsconfig at {outputPath}");
             }
             else
@@ -56,43 +82,56 @@ namespace VSConfigFinder
             }
         }
 
+        /// <summary>
+        /// Read all the components in the nested .vsconfigs recursively, starting from the given path. 
+        /// </summary>
+        /// <param name="fileSystem">The <see cref="IFileSystem"/>.</param>
+        /// <param name="options">The command line options.</param>
+        /// <returns></returns>
+        public static string[] ReadComponents(IFileSystem fileSystem, CommandLineOptions options)
+        {
+            var pathsToVsConfigs = fileSystem.GetFileSystemEntries(options.FolderPath, ConfigExtension, recursive: true);
+
+            var componentsSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var serializerOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                AllowTrailingCommas = true,
+            };
+
+            foreach (var path in pathsToVsConfigs)
+            {
+                string[]? components;
+                using (var stream = fileSystem.OpenFile(path))
+                {
+                    components = JsonSerializer.Deserialize<VSConfig>(stream, serializerOptions)?.Components;
+                }
+
+                if (components is not null)
+                {
+                    componentsSet.UnionWith(components);
+                }
+            };
+
+            return componentsSet.ToArray();
+        }
+
         private static string CreateCommandLineOutput(VSConfig finalConfig)
         {
             var output = new StringBuilder(Add + " ");
 
-            foreach (var component in finalConfig.Components)
+            if (finalConfig.Components is not null)
             {
-                if (!string.IsNullOrEmpty(component))
+                foreach (var component in finalConfig.Components)
                 {
-                    output.AppendFormat("{0} ", component);
+                    if (!string.IsNullOrEmpty(component))
+                    {
+                        output.AppendFormat("{0} ", component);
+                    }
                 }
             }
 
             return output.ToString();
-        }
-
-        public static string[] ReadComponents(CommandLineOptions options)
-        {
-            var fileSystem = new FileSystem();
-            var pathsToVsConfigs = fileSystem.GetFileSystemEntries(options.FolderPath, ConfigExtension, true);
-
-            HashSet<string> componentsSet = new HashSet<string>();
-            var serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
-            foreach (var path in pathsToVsConfigs)
-            {
-                var stream = fileSystem.OpenFile(path);
-                var components = JsonSerializer.Deserialize<VSConfig>(stream, serializerOptions).Components;
-
-                if (components != null)
-                {
-                    componentsSet.UnionWith(components);
-                }
-
-                stream.Close();
-            };
-
-            return componentsSet.ToArray();
         }
     }
 }

@@ -1,11 +1,13 @@
-﻿namespace VSConfigFinder
-{
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Text.Json;
+﻿// <copyright file="FileSystem.cs" company="Microsoft Corporation">
+// Copyright (C) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+// </copyright>
 
+namespace VSConfigFinder
+{
+    using System.IO;
+
+    /// <inheritdoc/>
     public class FileSystem : IFileSystem
     {
         /// <inheritdoc/>
@@ -23,6 +25,14 @@
             Utilities.ValidateIsNotNullOrEmpty(path, nameof(Path));
 
             return File.OpenRead(path);
+        }
+
+        /// <inheritdoc/>
+        public void WriteAllText(string path, string data)
+        {
+            Utilities.ValidateIsNotNullOrEmpty(path, nameof(Path));
+
+            File.WriteAllText(path, data);
         }
     }
 }
