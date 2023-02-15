@@ -23,8 +23,7 @@ namespace VSConfigFinder
             {
                 with.CaseSensitive = false;
             });
-
-            // Take in the command line arguments
+            
             parser.ParseArguments<CommandLineOptions>(args)
                 .WithParsed(Run)
                 .WithNotParsed(HandleParseError);
@@ -32,27 +31,26 @@ namespace VSConfigFinder
 
         private static void Run(CommandLineOptions options)
         {
-            // Run
+            var fileSystem = new FileSystem();
+
+            ResolveCommandLineOptions(options);
+
+            var finalConfig = new VSConfig()
+            {
+                // This is the new final .vsconfig, so version 1.0 is used.
+                Version = new Version("1.0"),
+                Components = Utilities.ReadComponents(fileSystem, options),
+            };
+
+            Utilities.CreateOutput(fileSystem, finalConfig, options);
+        }
+
+        private static void ResolveCommandLineOptions(CommandLineOptions options)
+        {
             if (options.CreateFile)
             {
                 options.ConfigOutputPath ??= Directory.GetCurrentDirectory();
             }
-
-            // TODO: Replace this with the output from the runner
-            var finalConfig = new VSConfig()
-            {
-                Version = new Version("1.0"),
-                Components = new string[]
-                {
-                    "Microsoft.VisualStudio.Component.NuGet",
-                    "Microsoft.VisualStudio.Component.Roslyn.Compiler",
-                    "Microsoft.Component.MSBuild",
-                    "Microsoft.NetCore.Component.Runtime.6.0",
-                },
-            };
-
-            // Output
-            Utilities.CreateOutput(finalConfig, options);
         }
 
         private static void HandleParseError(IEnumerable<Error> errors)

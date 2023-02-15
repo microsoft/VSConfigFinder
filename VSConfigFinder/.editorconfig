@@ -1,4 +1,4 @@
-file_header_template = <copyright file="{fileName}" company="Microsoft Corporation">\nCopyright (C) Microsoft Corporation. All rights reserved.\nLicensed under the MIT license. See LICENSE.txt in the project root for license information.\n</copyright>
+﻿file_header_template = <copyright file="{fileName}" company="Microsoft Corporation">\nCopyright (C) Microsoft Corporation. All rights reserved.\nLicensed under the MIT license. See LICENSE.txt in the project root for license information.\n</copyright>
 
 # All files
 [*]
@@ -118,6 +118,8 @@ dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
 
 # Diagnostics
 
+# CS8602: Dereference of a possibly null reference.
+dotnet_diagnostic.CS8602.severity = error
 # CS8603: Possible null reference return.
 dotnet_diagnostic.CS8603.severity = error
 dotnet_style_namespace_match_folder = true:suggestion
