@@ -60,9 +60,10 @@ namespace VSConfigFinder
         /// Create an output from the final <see cref="VSConfig"/> and given <see cref="CommandLineOptions"/>.
         /// </summary>
         /// <param name="fileSystem">The <see cref="IFileSystem"/>.</param>
+        /// <param name="logger">The <see cref="ILogger"/>.</param>
         /// <param name="finalConfig">The final <see cref="VSConfig"/> to export.</param>
         /// <param name="options">The command line options.</param>
-        public static void CreateOutput(IFileSystem fileSystem, VSConfig finalConfig, CommandLineOptions options)
+        public static void CreateOutput(IFileSystem fileSystem, ILogger logger, VSConfig finalConfig, CommandLineOptions options)
         {
             if (options.CreateFile)
             {
@@ -72,13 +73,13 @@ namespace VSConfigFinder
                 var outputPath = Path.Combine(options.ConfigOutputPath!, ConfigExtension);
 
                 fileSystem.WriteAllText(outputPath, jsonString);
-                Console.WriteLine($"Successfully created the final .vsconfig at {outputPath}");
+                logger.Log($"Successfully created the final .vsconfig at {outputPath}");
             }
             else
             {
                 // output to a command line
                 var output = CreateCommandLineOutput(finalConfig);
-                Console.WriteLine(output);
+                logger.Log(output);
             }
         }
 
@@ -118,7 +119,7 @@ namespace VSConfigFinder
 
         private static string CreateCommandLineOutput(VSConfig finalConfig)
         {
-            var output = new StringBuilder(Add + " ");
+            var output = new StringBuilder();
 
             if (finalConfig.Components is not null)
             {
@@ -126,12 +127,12 @@ namespace VSConfigFinder
                 {
                     if (!string.IsNullOrEmpty(component))
                     {
-                        output.AppendFormat("{0} ", component);
+                        output.AppendFormat("{0} {1} ", Add, component);
                     }
                 }
             }
 
-            return output.ToString();
+            return output.ToString().TrimEnd();
         }
     }
 }

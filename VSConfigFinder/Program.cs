@@ -32,6 +32,7 @@ namespace VSConfigFinder
         private static void Run(CommandLineOptions options)
         {
             var fileSystem = new FileSystem();
+            var logger = new ConsoleLogger();
 
             ResolveCommandLineOptions(options);
 
@@ -42,7 +43,7 @@ namespace VSConfigFinder
                 Components = Utilities.ReadComponents(fileSystem, options),
             };
 
-            Utilities.CreateOutput(fileSystem, finalConfig, options);
+            Utilities.CreateOutput(fileSystem, logger, finalConfig, options);
         }
 
         private static void ResolveCommandLineOptions(CommandLineOptions options)

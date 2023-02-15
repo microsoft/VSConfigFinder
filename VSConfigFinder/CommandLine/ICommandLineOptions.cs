@@ -11,9 +11,9 @@ namespace VSConfigFinder
     public interface ICommandLineOptions
     {
         /// <summary>
-        /// Gets or sets the folder path to be used as the root (starting point) of the search.
+        /// Gets or sets the folder paths to be used as the root (starting point) of the search.
         /// </summary>
-        string FolderPath { get; set; }
+        IEnumerable<string> FolderPath { get; set; }
 
         /// <summary>
         /// Gets or sets the value indicating whether the output gets created as a consolidated .vsconfig file instead of the Visual Studio Installer setup command line arguments.
