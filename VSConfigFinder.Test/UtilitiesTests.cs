@@ -7,7 +7,6 @@ namespace VSConfigFinder.Test
 {
     using Moq;
     using System.Text;
-    using System.Text.Json;
     using Xunit;
 
     public class UtilitiesTests
@@ -29,10 +28,14 @@ namespace VSConfigFinder.Test
             Utilities.ValidateIsNotNullOrEmpty(str, nameof(str));
         }
 
-        [Fact]
-        public void CreateOutput_Creates_File_With_Expected_String()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void CreateOutput_Creates_FileOrArguments_With_Expected_String(bool createFile)
         {
             var fileSystem = new Mock<IFileSystem>();
+            var logger = new Mock<ILogger>();
+
             var finalConfig = new VSConfig
             {
                 Version = new Version("1.0"),
@@ -59,25 +62,39 @@ namespace VSConfigFinder.Test
 
             var options = new CommandLineOptions
             {
-                FolderPath = "C:\\input",
-                CreateFile = true,
+                FolderPath = new[] { "C:\\input" },
+                CreateFile = createFile,
                 ConfigOutputPath = "C:\\output",
             };
 
-            Utilities.CreateOutput(fileSystem.Object, finalConfig, options);
+            Utilities.CreateOutput(fileSystem.Object, logger.Object, finalConfig, options);
 
-            var outputPath = Path.Combine(options.ConfigOutputPath, ".vsconfig");
-            fileSystem.Verify(x => x.WriteAllText(outputPath, jsonString));
+            if (createFile)
+            {
+                var outputPath = Path.Combine(options.ConfigOutputPath, ".vsconfig");
+                fileSystem.Verify(x => x.WriteAllText(outputPath, jsonString));
+            }
+            else
+            {
+                var addArguments = "--add Microsoft.VisualStudio.Component.NuGet --add Microsoft.VisualStudio.Component.Roslyn.Compiler --add Microsoft.Component.MSBuild --add Microsoft.NetCore.Component.Runtime.6.0";
+                logger.Verify(x => x.Log(addArguments));
+            }
         }
 
         [Fact]
         public void ReadComponents_Reads_AllNestedDirectories_And_OutputsAllComponents()
         {
+            /*
+             * folder structure:
+             * pathA
+             *   - pathB
+             */
+
             var fileSystem = new Mock<IFileSystem>();
 
             var options = new CommandLineOptions
             {
-                FolderPath = "C:\\input",
+                FolderPath = new[] { "C:\\input" },
                 ConfigOutputPath = "C:\\output",
             };
 

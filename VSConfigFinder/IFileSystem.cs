@@ -13,13 +13,13 @@ namespace VSConfigFinder
         /// <summary>
         /// Get files and directories within directory.
         /// </summary>
-        /// <param name="path">directory path</param>
+        /// <param name="path">directory path to search for.</param>
         /// <param name="pattern">pattern to match for file names. To match anything and everything, specify '*'</param>
         /// <param name="recursive">Optional: recursively search sub directories</param>
         /// <returns>array of files within the directory</returns>
         /// <exception cref="ArgumentException"><paramref name="path"/> is empty.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="path"/> is null.</exception>
-        public string[] GetFileSystemEntries(string path, string pattern, bool recursive = false);
+        public IEnumerable<string> GetFileSystemEntries(string path, string pattern, bool recursive = false);
 
         /// <summary>
         /// Opens a file for reading.

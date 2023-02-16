@@ -11,7 +11,7 @@ namespace VSConfigFinder
     public class FileSystem : IFileSystem
     {
         /// <inheritdoc/>
-        public string[] GetFileSystemEntries(string path, string pattern, bool recursive = false)
+        public IEnumerable<string> GetFileSystemEntries(string path, string pattern, bool recursive = false)
         {
             Utilities.ValidateIsNotNullOrEmpty(path, nameof(path));
             Utilities.ValidateIsNotNullOrEmpty(pattern, nameof(pattern));

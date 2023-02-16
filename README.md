@@ -1,6 +1,6 @@
 # [Visual Studio] VSConfig Finder
 
-When you want to set up Visual Studio from a new environment, `.vsconfig` files can be very useful as they are easy to be created from your [existing installations](https://learn.microsoft.com/en-us/visualstudio/install/import-export-installation-configurations?view=vs-2022) or from a [working solution](https://devblogs.microsoft.com/setup/configure-visual-studio-across-your-organization-with-vsconfig/). However, one existing problem with the `.vsconfig` usage is that Visual Studio Installer supports importing one `.vsconfig` file at a time, so if you have multiple `.vsconfig`s throughout your solution (e.g. you have a monorepo that is consisted of multiple projects) and you want to apply them while setting up your pipeline, you would have to run an installer operation as many times as you'd want to use the different `.vsconfig`s. One way to get around this problem is to generate a single `.vsconfig` yourself that you put on the root of the solution, but this approach still has its own issues: For example, if you're only interested in a subset of the solution, you'll install far more components than the ones you need, resulting in a longer install and subsequent update time.
+When you want to set up Visual Studio from a new environment, `.vsconfig` files can be very useful as they are easy to be created from your [existing installations](https://learn.microsoft.com/en-us/visualstudio/install/import-export-installation-configurations?view=vs-2022) or from a [working solution](https://devblogs.microsoft.com/setup/configure-visual-studio-across-your-organization-with-vsconfig/). However, one existing problem with the `.vsconfig` usage is that the Visual Studio Installer supports importing one `.vsconfig` file at a time, so if you have multiple `.vsconfig`s throughout your solution (e.g. you have a monorepo that is consisted of multiple projects) and you want to apply them while setting up your pipeline, you would have to run an installer operation as many times as you'd want to use the different `.vsconfig`s. One way to get around this problem is to generate a single `.vsconfig` yourself that you put on the root of the solution, but this approach still has its own issues: For example, if you're only interested in a subset of the solution, you'll install far more components than the ones you need, resulting in a longer install and subsequent update time.
 
 _VSConfigFinder_ is designed to be a redistributable, single-file executable that can be used in build or deployment scripts to use multiple `.vsconfig`s that exist throughout the solution without having to go through multiple installer operations by recursively finding nested `.vsconfig` files and merging them into a single output file, or an installer command line argument, depending on the customer requirement.
 
@@ -14,6 +14,7 @@ Imagine that you have a solution or a repository with the folder structure as be
 root
   - folderA
   - folderB
+    - .vsconfig (packageE)
   - folderC
     - someProject
       - .vsconfig (packageA, packageB)
@@ -30,9 +31,21 @@ If you want to pass in all the components that are needed to build & run `folder
 
 This will generate the following command as a console output that you can simply pass into the installer.
 
-`--add packageA packageB packageC packageD`
+`--add packageA --add packageB --add packageC --add packageD`
 
 Remember to add your own verb (e.g. `install` or `modify`) in conjunction with the tool output.
+
+## Multi-Root Folders Support
+
+Say if you want to do something similar to the example above, but you want everything under `folderB` AND `folderC`. You cannot pass in one or the other, because the two do not share a common folder (if you pass in the `root`, `folderA` will also be included). Instead, you can simply pass in the topmost folders as a list to achieve your goal.
+
+`VSConfig.exe --folderpath root\folderC root\folderB`
+
+This will generate the following command as a console output that you can simply pass into the installer.
+
+`--add packageA --add packageB --add packageC --add packageD --add packageE`
+
+Again, remember to add your own verb (e.g. `install` or `modify`) in conjunction with the tool output.
 
 ## Alternate Example
 
@@ -41,6 +54,8 @@ Alternatively, you can pass in additional parameters provided by the tool to get
 `VSConfig.exe --folderpath root\folderC --createfile --configoutputpath c:\somefolder`
 
 This will generate an alternate single `.vsconfig` file with all the needed components in the specified `configOutputPath`. If you don't specify a `configOutputPath`, the output directory will default to the current directory.
+
+Note that if you choose to use `--createfile`, the Visual Studio Installer arguments will no longer be output to the console.
 
 ## Contributing
 
