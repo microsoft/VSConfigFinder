@@ -11,19 +11,12 @@ namespace VSConfigFinder
     public class FileSystem : IFileSystem
     {
         /// <inheritdoc/>
-        public IEnumerable<string> GetFileSystemEntries(IEnumerable<string> paths, string pattern, bool recursive = false)
+        public IEnumerable<string> GetFileSystemEntries(string path, string pattern, bool recursive = false)
         {
-            Utilities.IsNotNull(paths, nameof(paths));
+            Utilities.ValidateIsNotNullOrEmpty(path, nameof(path));
             Utilities.ValidateIsNotNullOrEmpty(pattern, nameof(pattern));
 
-            var result = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            
-            foreach (var path in paths)
-            {
-                result.UnionWith(Directory.GetFileSystemEntries(path, pattern, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly));
-            }
-
-            return result;
+            return Directory.GetFileSystemEntries(path, pattern, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         }
 
         /// <inheritdoc/>
