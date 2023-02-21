@@ -40,9 +40,9 @@ steps:
     arguments: '--configuration $(BuildConfiguration)'
 
 - task: CopyFiles@2
-  displayName: 'Copy build artifacts from: $(Build.SourcesDirectory)\bin\$(BuildConfiguration)\** to $(Build.ArtifactStagingDirectory)\out'
+  displayName: 'Copy build artifacts from: $(Build.SourcesDirectory)\VSConfigFinder\bin\$(BuildConfiguration)\** to $(Build.ArtifactStagingDirectory)\out'
   inputs:
-    SourceFolder: $(Build.SourcesDirectory)
+    SourceFolder: $(Build.SourcesDirectory)\VSConfigFinder
     Contents: |
      bin\$(BuildConfiguration)\**
     TargetFolder: $(Build.ArtifactStagingDirectory)\out
