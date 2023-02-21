@@ -132,7 +132,7 @@ namespace VSConfigFinder.Test
                 """;
             var pathBReader = new MemoryStream(Encoding.UTF8.GetBytes(pathBConfig));
 
-            fileSystem.Setup(x => x.GetFileSystemEntries("C:\\pathA", "*"+VSConfig, true)).Returns(new[] { pathAConfigFile, pathBConfigFile });
+            fileSystem.Setup(x => x.GetFileSystemEntries("C:\\pathA", "*" + VSConfig, true)).Returns(new[] { pathAConfigFile, pathBConfigFile });
 
             fileSystem.Setup(x => x.OpenFile(pathAConfigFile)).Returns(pathAReader);
             fileSystem.Setup(x => x.OpenFile(pathBConfigFile)).Returns(pathBReader);
