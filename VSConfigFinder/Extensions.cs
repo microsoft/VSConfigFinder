@@ -18,9 +18,9 @@ namespace VSConfigFinder
         /// </summary>
         /// <param name="fileSystem">The <see cref="IFileSystem"/>.</param>
         /// <param name="paths">The list of top-level paths.</param>
-        /// <param name="pattern">pattern to match for file names. To match anything and everything, specify '*'</param>
+        /// <param name="pattern">Pattern to match for file names. To match anything and everything, specify '*'</param>
         /// <param name="recursive">Optional: recursively search sub directories</param>
-        /// <returns></returns>
+        /// <returns>A set of path to files that match the pattern</returns>
         public static IEnumerable<string> GetFileSystemEntries(this IFileSystem fileSystem, IEnumerable<string> paths, string pattern, bool recursive = false)
         {
             Utilities.IsNotNull(paths, nameof(paths));
