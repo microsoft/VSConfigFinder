@@ -3,7 +3,7 @@
 
 name: PR Build
 
-on: [ push, pull_request ]
+on: [ push ]
 
 env:
   # Path to the project source.
