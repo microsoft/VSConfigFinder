@@ -87,14 +87,16 @@ namespace VSConfigFinder.Test
             /*
              * folder structure:
              * pathA
+             *   - .vsconfig
              *   - pathB
+             *      - .vsconfig
              */
 
             var fileSystem = new Mock<IFileSystem>();
 
             var options = new CommandLineOptions
             {
-                FolderPath = new[] { "C:\\input" },
+                FolderPath = new[] { "C:\\pathA" },
                 ConfigOutputPath = "C:\\output",
             };
 
@@ -112,7 +114,7 @@ namespace VSConfigFinder.Test
             var pathAReader = new MemoryStream(Encoding.UTF8.GetBytes(pathAConfig));
 
             // pathB
-            var pathB = "C:\\pathB";
+            var pathB = "C:\\pathA\\pathB";
             var pathBConfig = """
                 {
                   "Version": "1.0",
@@ -124,7 +126,7 @@ namespace VSConfigFinder.Test
                 """;
             var pathBReader = new MemoryStream(Encoding.UTF8.GetBytes(pathBConfig));
 
-            fileSystem.Setup(x => x.GetFileSystemEntries(options.FolderPath, ".vsconfig", true)).Returns(new[] { pathA, pathB });
+            fileSystem.Setup(x => x.GetFileSystemEntries("C:\\pathA", "*.vsconfig", true)).Returns(new[] { pathA, pathB });
 
             fileSystem.Setup(x => x.OpenFile(pathA)).Returns(pathAReader);
             fileSystem.Setup(x => x.OpenFile(pathB)).Returns(pathBReader);
