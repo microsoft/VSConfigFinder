@@ -40,7 +40,7 @@ steps:
     arguments: '--configuration $(BuildConfiguration)'
 
 - task: CopyFiles@2
-  displayName: Copy build artifacts
+  displayName: Copy build artifacts from: $(Build.SourcesDirectory)\bin\$(BuildConfiguration)\** to $(Build.ArtifactStagingDirectory)\out
   inputs:
     SourceFolder: $(Build.SourcesDirectory)
     Contents: |
@@ -48,7 +48,7 @@ steps:
     TargetFolder: $(Build.ArtifactStagingDirectory)\out
 
 - task: PublishBuildArtifacts@1
-  displayName: Publish build artifacts
+  displayName: Publish build artifacts from: $(Build.ArtifactStagingDirectory)\out
   inputs:
     PathtoPublish: $(Build.ArtifactStagingDirectory)\out
     ArtifactName: drop
