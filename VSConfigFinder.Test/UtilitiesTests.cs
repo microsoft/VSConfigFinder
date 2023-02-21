@@ -11,6 +11,8 @@ namespace VSConfigFinder.Test
 
     public class UtilitiesTests
     {
+        const string VSConfig = ".vsconfig";
+
         [Fact]
         public void ValidateIsNotNullOrEmpty_NullOrEmpty_String_Throws_AppropriateException()
         {
@@ -71,7 +73,7 @@ namespace VSConfigFinder.Test
 
             if (createFile)
             {
-                var outputPath = Path.Combine(options.ConfigOutputPath, ".vsconfig");
+                var outputPath = Path.Combine(options.ConfigOutputPath, VSConfig);
                 fileSystem.Verify(x => x.WriteAllText(outputPath, jsonString));
             }
             else
@@ -87,19 +89,23 @@ namespace VSConfigFinder.Test
             /*
              * folder structure:
              * pathA
+             *   - .vsconfig
              *   - pathB
+             *      - .vsconfig
              */
 
             var fileSystem = new Mock<IFileSystem>();
 
             var options = new CommandLineOptions
             {
-                FolderPath = new[] { "C:\\input" },
+                FolderPath = new[] { "C:\\pathA" },
                 ConfigOutputPath = "C:\\output",
             };
 
             // pathA
             var pathA = "C:\\pathA";
+            var pathAConfigFile = Path.Combine(pathA, VSConfig);
+
             var pathAConfig = """
                 {
                   "Version": "1.0",
@@ -112,7 +118,9 @@ namespace VSConfigFinder.Test
             var pathAReader = new MemoryStream(Encoding.UTF8.GetBytes(pathAConfig));
 
             // pathB
-            var pathB = "C:\\pathB";
+            var pathB = Path.Combine(pathA, "pathB");
+            var pathBConfigFile = Path.Combine(pathB, VSConfig);
+
             var pathBConfig = """
                 {
                   "Version": "1.0",
@@ -124,10 +132,10 @@ namespace VSConfigFinder.Test
                 """;
             var pathBReader = new MemoryStream(Encoding.UTF8.GetBytes(pathBConfig));
 
-            fileSystem.Setup(x => x.GetFileSystemEntries(options.FolderPath, ".vsconfig", true)).Returns(new[] { pathA, pathB });
+            fileSystem.Setup(x => x.GetFileSystemEntries("C:\\pathA", "*" + VSConfig, true)).Returns(new[] { pathAConfigFile, pathBConfigFile });
 
-            fileSystem.Setup(x => x.OpenFile(pathA)).Returns(pathAReader);
-            fileSystem.Setup(x => x.OpenFile(pathB)).Returns(pathBReader);
+            fileSystem.Setup(x => x.OpenFile(pathAConfigFile)).Returns(pathAReader);
+            fileSystem.Setup(x => x.OpenFile(pathBConfigFile)).Returns(pathBReader);
 
             var components = Utilities.ReadComponents(fileSystem.Object, options);
             Assert.Equal(3, components.Length);
