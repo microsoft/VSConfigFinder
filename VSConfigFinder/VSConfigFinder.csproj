@@ -7,10 +7,26 @@
     <Nullable>enable</Nullable>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishPath>$(OutputPath)$(RuntimeIdentifier)\publish\</PublishPath>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+    
+  <ItemGroup>
+    <FilesToSign Include="$(PublishPath)VSConfigFinder.dll">
+        <Authenticode>Microsoft400</Authenticode>
+        <StrongName>StrongName</StrongName>
+    </FilesToSign>
+    <FilesToSign Include="$(PublishPath)VSConfigFinder.exe" Condition=" Exists('$(PublishPath)VSConfigFinder.exe') ">
+        <Authenticode>Microsoft400</Authenticode>
+    </FilesToSign>
   </ItemGroup>
 
   <ItemGroup>
