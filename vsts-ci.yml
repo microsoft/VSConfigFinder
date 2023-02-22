@@ -3,6 +3,8 @@
 
 variables:
   BuildConfiguration: Release
+  SignType: test
+  TeamName: vssetup
 
 trigger:
   batch: true
@@ -22,6 +24,13 @@ queue:
 steps:
 - checkout: self
   fetchDepth: 0 # avoid shallow clone so nbgv can do its work.
+
+- task: MicroBuildSigningPlugin@4
+  inputs:
+    signType: '$(SignType)'
+    feedSource: 'https://devdiv.pkgs.visualstudio.com/DefaultCollection/_packaging/MicroBuildToolset/nuget/v3/index.json'
+  env:
+    TeamName: '$(TeamName)'
 
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK'
