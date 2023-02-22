@@ -21,7 +21,7 @@ queue:
 
 steps:
 - checkout: self
-  fetchDepth: 0
+  fetchDepth: 0 # avoid shallow clone so nbgv can do its work.
 
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK'
