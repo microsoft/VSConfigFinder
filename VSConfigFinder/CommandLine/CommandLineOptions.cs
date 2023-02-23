@@ -12,7 +12,7 @@ namespace VSConfigFinder
     {
         /// <inheritdoc/>
         [Option("folderpath", Required = true, HelpText = "The source folder path to use as the root. The search will start from the root towards the bottom.")]
-        public IEnumerable<string> FolderPath { get; set; }
+        public IEnumerable<string>? FolderPath { get; set; }
 
         /// <inheritdoc/>
         [Option("createfile", Required = false, Default = false, HelpText = "(Default: false) Bool flag that indicates whether the output gets created as a consolidated .vsconfig file instead of the Visual Studio Installer setup command line arguments.\n" +

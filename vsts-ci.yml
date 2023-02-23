@@ -60,15 +60,15 @@ steps:
     zipAfterPublish: false
 
 - task: CopyFiles@2
-  displayName: 'Copy build artifacts from: $(Build.SourcesDirectory)\VSConfigFinder\bin\$(BuildConfiguration)\** to $(Build.ArtifactStagingDirectory)\out'
+  displayName: 'Copy build artifacts'
   inputs:
     SourceFolder: $(Build.SourcesDirectory)\VSConfigFinder
     Contents: |
-     bin\$(BuildConfiguration)\**
+     bin\$(BuildConfiguration)\**\publish\*
     TargetFolder: $(Build.ArtifactStagingDirectory)\out
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish build artifacts from: $(Build.ArtifactStagingDirectory)\out'
+  displayName: 'Publish build artifacts'
   inputs:
     PathtoPublish: $(Build.ArtifactStagingDirectory)\out
     ArtifactName: drop

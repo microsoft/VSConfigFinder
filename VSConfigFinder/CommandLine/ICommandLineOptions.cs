@@ -13,7 +13,7 @@ namespace VSConfigFinder
         /// <summary>
         /// Gets or sets the folder paths to be used as the root (starting point) of the search.
         /// </summary>
-        IEnumerable<string> FolderPath { get; set; }
+        IEnumerable<string>? FolderPath { get; set; }
 
         /// <summary>
         /// Gets or sets the value indicating whether the output gets created as a consolidated .vsconfig file instead of the Visual Studio Installer setup command line arguments.
