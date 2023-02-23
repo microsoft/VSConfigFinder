@@ -41,6 +41,7 @@ steps:
     command: 'test'
     projects: 'VSConfigFinder.Test'
     arguments: '--configuration $(BuildConfiguration)'
+    publishWebProjects: false
 
 - task: DotNetCoreCLI@2
   displayName: Publish
