@@ -8,7 +8,6 @@
         <PublishSingleFile>true</PublishSingleFile>
         <SelfContained>true</SelfContained>
         <PublishTrimmed>true</PublishTrimmed>
-        <PublishPath>$(OutputPath)$(RuntimeIdentifier)\publish\</PublishPath>
 	</PropertyGroup>
 	
 	<ItemGroup>
@@ -20,15 +19,15 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-        <FilesToSign Include="$(PublishPath)VSConfigFinder.dll">
+        <FilesToSign Include="$(OutputPath)VSConfigFinder.dll">
 			<Authenticode>Microsoft400</Authenticode>
         </FilesToSign>
-        <FilesToSign Include="$(PublishPath)VSConfigFinder.exe" Condition=" Exists('$(PublishPath)VSConfigFinder.exe') ">
+        <FilesToSign Include="$(OutputPath)VSConfigFinder.exe" Condition=" Exists('$(OutputPath)VSConfigFinder.exe') ">
 			<Authenticode>Microsoft400</Authenticode>
         </FilesToSign>
-		<PublishThirdPartyFilesToSign Include="$(PublishPath)\CommandLine.dll" >
+        <FilesToSign Include="$(OutputPath)CommandLine.dll">
 			<Authenticode>3PartySHA2</Authenticode>
-		</PublishThirdPartyFilesToSign>
+		</FilesToSign>
   </ItemGroup>
     
     <ItemGroup>
