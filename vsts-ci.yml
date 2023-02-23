@@ -47,6 +47,7 @@ steps:
   inputs:
     command: 'publish'
     arguments: '--no-build --configuration $(BuildConfiguration)'
+    publishWebProjects: false
 
 - task: CopyFiles@2
   displayName: 'Copy build artifacts from: $(Build.SourcesDirectory)\VSConfigFinder\bin\$(BuildConfiguration)\** to $(Build.ArtifactStagingDirectory)\out'
