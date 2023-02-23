@@ -6,22 +6,4 @@
       <Version>3.5.119</Version>
     </PackageReference>
   </ItemGroup>
-
-  <Target Name="SignPublishFiles"
-          Condition=" '$(MicroBuild_SigningEnabled)' == 'true' "
-          AfterTargets="Publish">
-	<ItemGroup>
-      <FilesToSign Include="$(PublishDir)$(TargetName)$(TargetExt)">
-        <PublishOnly>true</PublishOnly>
-      </FilesToSign>
-    </ItemGroup>
-    <SignFiles Files="@(FilesToSign)"
-               Type="$(SignType)"
-               BinariesDirectory="$(OutDir)"
-               IntermediatesDirectory="$(IntermediateOutputPath)"
-               Condition=" '%(FilesToSign.PublishOnly)' == 'true' " />
-    <ItemGroup>
-      <FilesToSign Remove="@(FilesToSign)" Condition=" '%(FilesToSign.PublishOnly)' == 'true' " />
-    </ItemGroup>
-  </Target>
 </Project>
