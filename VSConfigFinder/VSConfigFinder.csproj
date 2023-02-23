@@ -20,6 +20,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <FilesToSign Include="$(PublishPath)VSConfigFinder.dll">
+      <Authenticode>Microsoft400</Authenticode>
+      <StrongName>StrongName</StrongName>
+    </FilesToSign>
+    <FilesToSign Include="$(PublishPath)VSConfigFinder.exe" Condition=" Exists('$(PublishPath)VSConfigFinder.exe') ">
+      <Authenticode>Microsoft400</Authenticode>
+    </FilesToSign>
+  </ItemGroup>
+    
+  <ItemGroup>
     <EditorConfigFiles Remove="C:\Users\sknam\source\repos\VSConfigFinder\VSConfigFinder\.editorconfig" />
   </ItemGroup>
 
