@@ -41,13 +41,13 @@ steps:
     command: 'test'
     projects: 'VSConfigFinder.Test'
     arguments: '--configuration $(BuildConfiguration)'
-    publishWebProjects: false
 
 - task: DotNetCoreCLI@2
   displayName: Publish
   inputs:
     command: 'publish'
     arguments: '--no-build --configuration $(BuildConfiguration)'
+    publishWebProjects: false
 
 - task: CopyFiles@2
   displayName: 'Copy build artifacts from: $(Build.SourcesDirectory)\VSConfigFinder\bin\$(BuildConfiguration)\** to $(Build.ArtifactStagingDirectory)\out'
