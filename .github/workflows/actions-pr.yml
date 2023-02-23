@@ -40,4 +40,4 @@ jobs:
       run: dotnet test --verbosity normal --configuration ${{ env.BUILD_CONFIGURATION }} ${{ env.TEST_PROJECT_PATH }}
 
     - name: Publish
-      run: dotnet publish --no-build --configuration ${{ env.BUILD_CONFIGURATION }} ${{ env.TEST_PROJECT_PATH }}
+      run: dotnet publish --no-build --configuration ${{ env.BUILD_CONFIGURATION }} ${{ env.PROJECT_PATH }}
