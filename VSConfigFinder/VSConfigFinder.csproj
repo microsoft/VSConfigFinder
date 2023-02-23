@@ -22,7 +22,6 @@
   <ItemGroup>
     <FilesToSign Include="$(PublishPath)VSConfigFinder.dll">
       <Authenticode>Microsoft400</Authenticode>
-      <StrongName>StrongName</StrongName>
     </FilesToSign>
     <FilesToSign Include="$(PublishPath)VSConfigFinder.exe" Condition=" Exists('$(PublishPath)VSConfigFinder.exe') ">
       <Authenticode>Microsoft400</Authenticode>
