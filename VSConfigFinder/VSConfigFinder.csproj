@@ -32,11 +32,11 @@
   </ItemGroup>
     
     <ItemGroup>
-        <EditorConfigFiles Remove="C:\Users\sknam\source\repos\VSConfigFinder\VSConfigFinder\.editorconfig" />
+        <EditorConfigFiles Remove=".editorconfig" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="C:\Users\sknam\source\repos\VSConfigFinder\VSConfigFinder\.editorconfig" />
+        <None Include=".editorconfig" />
     </ItemGroup>
 
 </Project>

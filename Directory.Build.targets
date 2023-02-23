@@ -18,8 +18,4 @@
 			<FilesToSign Remove="@(FilesToSign)" Condition=" '%(FilesToSign.PublishOnly)' == 'true' " />
 		</ItemGroup>
 	</Target>
-
-	<Target Name="SignThirdPartyFiles" BeforeTargets="PackBuildOutputs" DependsOnTargets="Publish">
-		<SignFiles Files="@(PublishThirdPartyFilesToSign)" Type="$(SignType)" BinariesDirectory="$(PublishDir)" IntermediatesDirectory="$(IntermediateOutputPath)" ESRPSigning="" UseBearerToken="" Condition=" '@(PublishThirdPartyFilesToSign)' != '' " />
-	</Target>
 </Project>
