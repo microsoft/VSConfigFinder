@@ -1,39 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>true</SelfContained>
-    <PublishTrimmed>true</PublishTrimmed>
-    <PublishPath>$(OutputPath)$(RuntimeIdentifier)\publish\</PublishPath>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <FilesToSign Include="$(PublishPath)VSConfigFinder.dll">
-      <Authenticode>Microsoft400</Authenticode>
-    </FilesToSign>
-    <FilesToSign Include="$(PublishPath)VSConfigFinder.exe" Condition=" Exists('$(PublishPath)VSConfigFinder.exe') ">
-      <Authenticode>Microsoft400</Authenticode>
-    </FilesToSign>
+	
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PublishSingleFile>true</PublishSingleFile>
+        <SelfContained>true</SelfContained>
+        <PublishTrimmed>true</PublishTrimmed>
+        <PublishPath>$(OutputPath)$(RuntimeIdentifier)\publish\</PublishPath>
+	</PropertyGroup>
+	
+	<ItemGroup>
+        <PackageReference Include="CommandLineParser" Version="2.9.1" />
+        <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="1.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+	</ItemGroup>
+	
+	<ItemGroup>
+        <FilesToSign Include="$(PublishPath)VSConfigFinder.dll">
+			<Authenticode>Microsoft400</Authenticode>
+        </FilesToSign>
+        <FilesToSign Include="$(PublishPath)VSConfigFinder.exe" Condition=" Exists('$(PublishPath)VSConfigFinder.exe') ">
+			<Authenticode>Microsoft400</Authenticode>
+        </FilesToSign>
+		<PublishThirdPartyFilesToSign Include="$(PublishPath)\CommandLine.dll" >
+			<Authenticode>3PartySHA2</Authenticode>
+		</PublishThirdPartyFilesToSign>
   </ItemGroup>
     
-  <ItemGroup>
-    <EditorConfigFiles Remove="C:\Users\sknam\source\repos\VSConfigFinder\VSConfigFinder\.editorconfig" />
-  </ItemGroup>
+    <ItemGroup>
+        <EditorConfigFiles Remove="C:\Users\sknam\source\repos\VSConfigFinder\VSConfigFinder\.editorconfig" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Include="C:\Users\sknam\source\repos\VSConfigFinder\VSConfigFinder\.editorconfig" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="C:\Users\sknam\source\repos\VSConfigFinder\VSConfigFinder\.editorconfig" />
+    </ItemGroup>
 
 </Project>

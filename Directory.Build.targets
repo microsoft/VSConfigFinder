@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Target Name="SignPublishFiles"
+			Condition=" '$(MicroBuild_SigningEnabled)' == 'true' "
+			AfterTargets="Publish">
+		<ItemGroup>
+			<FilesToSign Include="$(PublishDir)$(TargetName)$(TargetExt)">
+				<PublishOnly>true</PublishOnly>
+				<Authenticode>Microsoft400</Authenticode>
+			</FilesToSign>
+		</ItemGroup>
+		<SignFiles Files="@(FilesToSign)"
+				   Type="$(SignType)"
+				   BinariesDirectory="$(OutDir)"
+				   IntermediatesDirectory="$(IntermediateOutputPath)"
+				   Condition=" '%(FilesToSign.PublishOnly)' == 'true' " />
+		<ItemGroup>
+			<FilesToSign Remove="@(FilesToSign)" Condition=" '%(FilesToSign.PublishOnly)' == 'true' " />
+		</ItemGroup>
+	</Target>
+
+	<Target Name="SignThirdPartyFiles" BeforeTargets="PackBuildOutputs" DependsOnTargets="Publish">
+		<SignFiles Files="@(PublishThirdPartyFilesToSign)" Type="$(SignType)" BinariesDirectory="$(PublishDir)" IntermediatesDirectory="$(IntermediateOutputPath)" ESRPSigning="" UseBearerToken="" Condition=" '@(PublishThirdPartyFilesToSign)' != '' " />
+	</Target>
+</Project>
