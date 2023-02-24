@@ -3,7 +3,7 @@
 
 variables:
   BuildConfiguration: Release
-  SignType: test
+  SignType: real
   TeamName: vssetup
 
 trigger:
