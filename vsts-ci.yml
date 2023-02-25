@@ -32,44 +32,6 @@ steps:
   env:
     TeamName: '$(TeamName)'
 
-- task: UseDotNet@2
-  displayName: 'Install .NET Core SDK'
-  inputs:
-    useGlobalJson: true
-    
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    command: 'build'
-    projects: 'VSConfigFinder'
-    arguments: '--configuration $(BuildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: Test
-  inputs:
-    command: 'test'
-    projects: 'VSConfigFinder.Test'
-    arguments: '--configuration $(BuildConfiguration)'
-
-- task: DotNetCoreCLI@2
-  displayName: Publish
-  inputs:
-    command: 'publish'
-    arguments: '--no-build --configuration $(BuildConfiguration)'
-    publishWebProjects: false
-    zipAfterPublish: false
-
-- task: CopyFiles@2
-  displayName: 'Copy build artifacts'
-  inputs:
-    SourceFolder: $(Build.SourcesDirectory)\VSConfigFinder
-    Contents: |
-     bin\$(BuildConfiguration)\**\publish\*
-    TargetFolder: $(Build.ArtifactStagingDirectory)\out
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish build artifacts'
-  inputs:
-    PathtoPublish: $(Build.ArtifactStagingDirectory)\out
-    ArtifactName: drop
-    publishLocation: Container
+- template: build.yml
+  parameters:
+      BuildConfiguration: $(BuildConfiguration)

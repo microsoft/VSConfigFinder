@@ -1,0 +1,48 @@
+# Copyright (C) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+
+parameters:
+  BuildConfiguration: Release
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Install .NET Core SDK'
+  inputs:
+    useGlobalJson: true
+    
+- task: DotNetCoreCLI@2
+  displayName: Build
+  inputs:
+    command: 'build'
+    projects: 'VSConfigFinder'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Test
+  inputs:
+    command: 'test'
+    projects: 'VSConfigFinder.Test'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: Publish
+  inputs:
+    command: 'publish'
+    arguments: '--no-build --configuration $(BuildConfiguration)'
+    publishWebProjects: false
+    zipAfterPublish: false
+
+- task: CopyFiles@2
+  displayName: 'Copy build artifacts from: $(Build.SourcesDirectory)\VSConfigFinder\bin\$(BuildConfiguration)\** to $(Build.ArtifactStagingDirectory)\out'
+  inputs:
+    SourceFolder: $(Build.SourcesDirectory)\VSConfigFinder
+    Contents: |
+     bin\$(BuildConfiguration)\**
+    TargetFolder: $(Build.ArtifactStagingDirectory)\out
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish build artifacts from: $(Build.ArtifactStagingDirectory)\out'
+  inputs:
+    PathtoPublish: $(Build.ArtifactStagingDirectory)\out
+    ArtifactName: drop
+    publishLocation: Container
