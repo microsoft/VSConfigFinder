@@ -32,6 +32,11 @@ steps:
     publishWebProjects: false
     zipAfterPublish: false
 
+- script: |
+    choco pack pkg\vswhere\VSConfigFinder.nuspec --out "bin\${{ parameters.BuildConfiguration }}" --version "%NBGV_NuGetPackageVersion%" "Configuration=${{ parameters.BuildConfiguration }}" "CommitId=$(Build.SourceVersion)" "Tag=$(Build.BuildNumber)"
+  displayName: Package
+  workingDirectory: $(Build.SourcesDirectory)
+
 - task: CopyFiles@2
   displayName: 'Copy build artifacts from: $(Build.SourcesDirectory)\VSConfigFinder\bin\$(BuildConfiguration)\** to $(Build.ArtifactStagingDirectory)\out'
   inputs:
