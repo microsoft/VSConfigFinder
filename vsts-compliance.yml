@@ -20,6 +20,14 @@ queue:
   name: VSEngSS-MicroBuild2019-1ES
   timeoutInMinutes: 120
 
+schedules:
+- cron: "0 12 * * 1"
+  displayName: 'Run every Monday at 12:00 p.m.'
+  branches:
+    include:
+    - main
+  always: true
+
 steps:
 - template: build.yml
   parameters:
