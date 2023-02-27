@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>VSConfigFinder</id>
+    <version>$Version$</version>
+    <title>Visual Studio Configuration Finder</title>
+    <authors>Microsoft</authors>
+    <owners>Microsoft</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://go.microsoft.com/fwlink/?linkid=839265</iconUrl>
+    <licenseUrl>https://github.com/Microsoft/VSConfigFinder/tree/$CommitId$/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/Microsoft/VSConfigFinder</projectUrl>
+    <description>Locate Visual Studio installation configuration files (.vsconfigs) downstream recursively and merge them all together</description>
+    <summary>Locate Visual Studio installation configuration files (.vsconfigs) downstream recursively and merge them all together</summary>
+    <copyright>© Microsoft Corporation. All rights reserved.</copyright>
+    <tags>vs vs2022 visualstudio</tags>
+    <developmentDependency>true</developmentDependency>
+    <projectSourceUrl>https://github.com/Microsoft/VSConfigFinder/tree/$CommitId$</projectSourceUrl>
+    <packageSourceUrl>https://github.com/Microsoft/VSConfigFinder/tree/$CommitId$/pkg/VSConfigFinder</packageSourceUrl>
+    <docsUrl>https://github.com/microsoft/VSConfigFinder/blob/main/README.md</docsUrl>
+    <bugTrackerUrl>https://github.com/Microsoft/VSConfigFinder/issues</bugTrackerUrl>
+    <releaseNotes>https://github.com/Microsoft/VSConfigFinder/releases/tag/$Tag$</releaseNotes>
+  </metadata>
+  <files>
+    <file src="..\..\VSConfigFinder\bin\$Configuration$\**\publish\VSConfigFinder.exe" target="tools\"/>
+    <file src="..\..\LICENSE.txt" target="tools\"/>
+    <file src="tools\VERIFICATION.txt" target="tools\"/>
+  </files>
+</package>

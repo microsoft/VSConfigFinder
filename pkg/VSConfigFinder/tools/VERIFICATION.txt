@@ -1,0 +1,5 @@
+VERIFICATION
+Verification is intended to assist the Chocolatey moderators and community
+in verifying that this package's contents are trustworthy.
+
+tools\VSConfigFinder.exe is produced by us from the same repository as this package: https://github.com/Microsoft/VSConfigFinder
