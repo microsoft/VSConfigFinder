@@ -10,8 +10,8 @@
     <iconUrl>https://go.microsoft.com/fwlink/?linkid=839265</iconUrl>
     <licenseUrl>https://github.com/Microsoft/VSConfigFinder/tree/$CommitId$/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/Microsoft/VSConfigFinder</projectUrl>
-    <description>Locate Visual Studio installation configuration files (.vsconfigs) downstream recursively and merge them altogether</description>
-    <summary>Locate Visual Studio installation configuration files (.vsconfigs) downstream recursively and merge them altogether</summary>
+    <description>Locate Visual Studio installation configuration files (.vsconfigs) downstream recursively and merge them all together</description>
+    <summary>Locate Visual Studio installation configuration files (.vsconfigs) downstream recursively and merge them all together</summary>
     <copyright>© Microsoft Corporation. All rights reserved.</copyright>
     <tags>vs vs2022 visualstudio</tags>
     <developmentDependency>true</developmentDependency>
@@ -22,7 +22,7 @@
     <releaseNotes>https://github.com/Microsoft/VSConfigFinder/releases/tag/$Tag$</releaseNotes>
   </metadata>
   <files>
-    <file src="..\..\bin\$Configuration$\VSConfigFinder.exe" target="tools\"/>
+    <file src="..\..\bin\$Configuration$\**\publish\VSConfigFinder.exe" target="tools\"/>
     <file src="..\..\LICENSE.txt" target="tools\"/>
     <file src="tools\VERIFICATION.txt" target="tools\"/>
   </files>
