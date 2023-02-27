@@ -1,0 +1,89 @@
+# Copyright (C) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE.txt in the project root for license information.
+
+variables:
+  BuildConfiguration: Release
+  TeamName: vssetup
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - main
+  paths:
+    exclude:
+    - README.md
+
+pr: none
+
+queue:
+  name: VSEngSS-MicroBuild2019-1ES
+  timeoutInMinutes: 120
+
+schedules:
+- cron: "0 12 * * 1"
+  displayName: 'Run every Monday at 12:00 p.m.'
+  branches:
+    include:
+    - main
+  always: true
+
+steps:
+- template: build.yml
+  parameters:
+      BuildConfiguration: $(BuildConfiguration)
+
+- task: BinSkim@4
+  displayName: 'Run BinSkim'
+  inputs:
+    InputType: Basic
+    Function: analyze
+    TargetPattern: guardianGlob
+    AnalyzeTargetGlob: '$(Build.ArtifactStagingDirectory)\**.dll;$(Build.ArtifactStagingDirectory)\**.exe;-:f|$(Build.ArtifactStagingDirectory)\**clrjit.dll;-:f|$(Build.ArtifactStagingDirectory)\**clrgc.dll;-:f|$(Build.ArtifactStagingDirectory)\**coreclr.dll;-:f|$(Build.ArtifactStagingDirectory)\**hostfxr.dll;-:f|$(Build.ArtifactStagingDirectory)\**hostpolicy.dll;-:f|$(Build.ArtifactStagingDirectory)\**Microsoft.DiaSymReader.Native.amd64.dll;-:f|$(Build.ArtifactStagingDirectory)\**mscordaccore.dll;-:f|$(Build.ArtifactStagingDirectory)\**mscordbi.dll;-:f|$(Build.ArtifactStagingDirectory)\**msquic.dll;-:f|$(Build.ArtifactStagingDirectory)\**System.IO.Compression.Native.dll;-:f|$(Build.ArtifactStagingDirectory)\**createdump.dll;-:f|$(Build.ArtifactStagingDirectory)\**clrgc.dll;-:f|$(Build.ArtifactStagingDirectory)\**mscordaccore_amd64_amd64_7.0.323.6910.dll;-:f|$(Build.ArtifactStagingDirectory)\**createdump.exe'
+    AnalyzeVerbose: true
+    AnalyzeHashes: true
+  continueOnError: true
+
+- task: ComponentGovernanceComponentDetection@0
+  displayName: 'Run Component Detection'
+  inputs:
+    sourceScanPath: $(Build.SourcesDirectory)
+  continueOnError: True
+
+- task: RoslynAnalyzers@3
+  displayName: 'Run Roslyn Analyzers'
+  inputs:
+    userProvideBuildInfo: auto
+    rulesetName: Recommended
+    rulesetVersion: Latest
+  condition: succeededOrFailed()
+  continueOnError: True
+  env:
+    system_accesstoken: $(System.AccessToken)
+
+- task: PoliCheck@2
+  displayName: 'Run PoliCheck'
+  inputs:
+    targetType: F
+    targetArgument: '$(Build.SourcesDirectory)'
+    optionsFC: 0
+    optionsXS: 1
+    optionsHMENABLE: 0
+  continueOnError: true
+
+- task: CredScan@2
+  displayName: 'Run CredScan'
+  inputs:
+    debugMode: false
+
+- task: PublishSecurityAnalysisLogs@2
+  displayName: 'Publish Security Analysis Logs'
+
+- task: PostAnalysis@1
+  displayName: 'Check SDL results'
+  inputs:
+    AllTools: true
+
+- task: MicroBuildCleanup@1
+  displayName: 'Clean up'
+  condition: succeededOrFailed()
