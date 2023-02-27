@@ -22,7 +22,7 @@
     <releaseNotes>https://github.com/Microsoft/VSConfigFinder/releases/tag/$Tag$</releaseNotes>
   </metadata>
   <files>
-    <file src="..\..\bin\$Configuration$\**\publish\VSConfigFinder.exe" target="tools\"/>
+    <file src="..\..\VSConfigFinder\bin\$Configuration$\**\publish\VSConfigFinder.exe" target="tools\"/>
     <file src="..\..\LICENSE.txt" target="tools\"/>
     <file src="tools\VERIFICATION.txt" target="tools\"/>
   </files>
