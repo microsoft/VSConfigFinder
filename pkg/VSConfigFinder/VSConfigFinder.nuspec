@@ -17,7 +17,7 @@
     <developmentDependency>true</developmentDependency>
     <projectSourceUrl>https://github.com/Microsoft/VSConfigFinder/tree/$CommitId$</projectSourceUrl>
     <packageSourceUrl>https://github.com/Microsoft/VSConfigFinder/tree/$CommitId$/pkg/VSConfigFinder</packageSourceUrl>
-    <docsUrl>https://github.com/Microsoft/VSConfigFinder</docsUrl>
+    <docsUrl>https://github.com/microsoft/VSConfigFinder/blob/main/README.md</docsUrl>
     <bugTrackerUrl>https://github.com/Microsoft/VSConfigFinder/issues</bugTrackerUrl>
     <releaseNotes>https://github.com/Microsoft/VSConfigFinder/releases/tag/$Tag$</releaseNotes>
   </metadata>
