@@ -34,11 +34,11 @@ steps:
 
 - script: |
     choco pack pkg\VSConfigFinder\VSConfigFinder.nuspec --out "VSConfigFinder\bin\${{ parameters.BuildConfiguration }}" --version "$(GitBuildVersion)" "Configuration=${{ parameters.BuildConfiguration }}" "CommitId=$(Build.SourceVersion)" "Tag=$(Build.BuildNumber)"
-  displayName: Package
+  displayName: 'Package Nupkg'
   workingDirectory: $(Build.SourcesDirectory)
 
 - task: CopyFiles@2
-  displayName: 'Copy build artifacts from: $(Build.SourcesDirectory)\VSConfigFinder\bin\$(BuildConfiguration)\** to $(Build.ArtifactStagingDirectory)\out'
+  displayName: 'Copy build artifacts'
   inputs:
     SourceFolder: $(Build.SourcesDirectory)\VSConfigFinder
     Contents: |
@@ -46,7 +46,7 @@ steps:
     TargetFolder: $(Build.ArtifactStagingDirectory)\out
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish build artifacts from: $(Build.ArtifactStagingDirectory)\out'
+  displayName: 'Publish build artifacts'
   inputs:
     PathtoPublish: $(Build.ArtifactStagingDirectory)\out
     ArtifactName: drop
