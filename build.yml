@@ -33,7 +33,7 @@ steps:
     zipAfterPublish: false
 
 - script: |
-    choco pack pkg\VSConfigFinder\VSConfigFinder.nuspec --out "VSConfigFinder\bin\${{ parameters.BuildConfiguration }}" --version "$(Build.GitBuildVersion)" "Configuration=${{ parameters.BuildConfiguration }}" "CommitId=$(Build.SourceVersion)" "Tag=$(Build.BuildNumber)"
+    choco pack pkg\VSConfigFinder\VSConfigFinder.nuspec --out "VSConfigFinder\bin\${{ parameters.BuildConfiguration }}" --version "$(GitBuildVersion)" "Configuration=${{ parameters.BuildConfiguration }}" "CommitId=$(Build.SourceVersion)" "Tag=$(Build.BuildNumber)"
   displayName: Package
   workingDirectory: $(Build.SourcesDirectory)
 
