@@ -5,12 +5,6 @@ parameters:
   BuildConfiguration: Release
 
 steps:
-- powershell: |
-    dotnet tool install --tool-path "${env:AGENT_TOOLSDIRECTORY}\nbgv" nbgv
-    $version = & "${env:AGENT_TOOLSDIRECTORY}\nbgv\nbgv.exe" get-version --variable SemVer1
-    & "${env:AGENT_TOOLSDIRECTORY}\nbgv\nbgv.exe" cloud --version $version
-  displayName: 'Set cloud build version'
-
 - task: UseDotNet@2
   displayName: 'Install .NET Core SDK'
   inputs:
@@ -39,7 +33,7 @@ steps:
     zipAfterPublish: false
 
 - script: |
-    choco pack pkg\VSConfigFinder\VSConfigFinder.nuspec --out "VSConfigFinder\bin\${{ parameters.BuildConfiguration }}" --version "%NBGV_NuGetPackageVersion%" "Configuration=${{ parameters.BuildConfiguration }}" "CommitId=$(Build.SourceVersion)" "Tag=$(Build.BuildNumber)"
+    choco pack pkg\VSConfigFinder\VSConfigFinder.nuspec --out "VSConfigFinder\bin\${{ parameters.BuildConfiguration }}" --version "$(Build.GitBuildVersion)" "Configuration=${{ parameters.BuildConfiguration }}" "CommitId=$(Build.SourceVersion)" "Tag=$(Build.BuildNumber)"
   displayName: Package
   workingDirectory: $(Build.SourcesDirectory)
 
