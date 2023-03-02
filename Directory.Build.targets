@@ -18,4 +18,14 @@
 			<FilesToSign Remove="@(FilesToSign)" Condition=" '%(FilesToSign.PublishOnly)' == 'true' " />
 		</ItemGroup>
 	</Target>
+	<!-- Guardian Roslyn SDL analysis removes all analyzers, including code generators, from a csproj then adds back only SDL related analyzers. If your projects need generators to build, you can add them back in after they are removed. https://dev.azure.com/securitytools/SecurityIntegration/_git/Microsoft.Guardian?path=%2fsrc%2fMicrosoft.Guardian.RoslynAnalyzers%2fRoslynEnvironment.cs -->  
+	<Target Name="ReAddCodeGenerators"
+			Condition="'$(GdnRoslynAnalyzersRunId)'!=''" 
+			AfterTargets="ResolveCodeAnalysisRuleSet" 
+			BeforeTargets="CoreCompile">    
+		<ItemGroup>      
+			<Analyzer Include="$(PkgMicrosoft_Windows_CsWin32)\analyzers\cs\*.dll" 
+					  Condition="Exists('$(PkgMicrosoft_Windows_CsWin32)\analyzers\cs')" />    
+		</ItemGroup>  
+	</Target>
 </Project>
