@@ -17,7 +17,7 @@ trigger:
 pr: none
 
 queue:
-  name: VSEngSS-MicroBuild2019-1ES
+  name: VSEngSS-MicroBuild2022-1ES
   timeoutInMinutes: 120
 
 schedules:
