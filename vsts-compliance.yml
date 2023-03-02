@@ -28,10 +28,10 @@ queue:
 #     - main
 #   always: true
 
-# steps:
-# - template: build.yml
-#   parameters:
-#       BuildConfiguration: $(BuildConfiguration)
+steps:
+- template: build.yml
+  parameters:
+      BuildConfiguration: $(BuildConfiguration)
 
 # - task: BinSkim@4
 #   displayName: 'Run BinSkim'
