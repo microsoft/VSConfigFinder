@@ -5,14 +5,14 @@ variables:
   BuildConfiguration: Release
   TeamName: vssetup
 
-trigger:
-  batch: true
-  branches:
-    include:
-    - main
-  paths:
-    exclude:
-    - README.md
+# trigger:
+#   batch: true
+#   branches:
+#     include:
+#     - main
+#   paths:
+#     exclude:
+#     - README.md
 
 pr: none
 
@@ -20,18 +20,18 @@ queue:
   name: VSEngSS-MicroBuild2022-1ES
   timeoutInMinutes: 120
 
-schedules:
-- cron: "0 12 * * 1"
-  displayName: 'Run every Monday at 12:00 p.m.'
-  branches:
-    include:
-    - main
-  always: true
+# schedules:
+# - cron: "0 12 * * 1"
+#   displayName: 'Run every Monday at 12:00 p.m.'
+#   branches:
+#     include:
+#     - main
+#   always: true
 
-steps:
-- template: build.yml
-  parameters:
-      BuildConfiguration: $(BuildConfiguration)
+# steps:
+# - template: build.yml
+#   parameters:
+#       BuildConfiguration: $(BuildConfiguration)
 
 # - task: BinSkim@4
 #   displayName: 'Run BinSkim'
