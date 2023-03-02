@@ -5,14 +5,14 @@ variables:
   BuildConfiguration: Release
   TeamName: vssetup
 
-# trigger:
-#   batch: true
-#   branches:
-#     include:
-#     - main
-#   paths:
-#     exclude:
-#     - README.md
+trigger:
+  batch: true
+  branches:
+    include:
+    - main
+  paths:
+    exclude:
+    - README.md
 
 pr: none
 
