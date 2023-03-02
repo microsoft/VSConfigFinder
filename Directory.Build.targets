@@ -24,8 +24,15 @@
 			AfterTargets="ResolveCodeAnalysisRuleSet" 
 			BeforeTargets="CoreCompile">    
 		<ItemGroup>      
-			<Analyzer Include="$(PkgMicrosoft_Windows_CsWin32)\analyzers\dotnet\cs\*.dll" 
-					  Condition="Exists('$(PkgMicrosoft_Windows_CsWin32)\analyzers\dotnet\cs')" />    
+			<Analyzer Include="@(Analyzer2)" />    
 		</ItemGroup>  
 	</Target>
-</Project>
+	<Target Name="Foo"
+			Condition="'$(GdnRoslynAnalyzersRunId)'!=''"
+			BeforeTargets="GdnRoslynAnalyzers_">
+		<ItemGroup>
+			<Analyzer2 Include="@(Analyzer)"
+					  Condition="'%(Filename)' == 'System.Text.Json.SourceGeneration'" />   
+		</ItemGroup>
+	</Target>
+	</Project>
