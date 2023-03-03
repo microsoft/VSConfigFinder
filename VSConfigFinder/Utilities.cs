@@ -68,7 +68,8 @@ namespace VSConfigFinder
             if (options.CreateFile)
             {
                 // Create a file
-                var jsonString = JsonSerializer.Serialize(finalConfig, typeof(VSConfig), SourceGenerationContext.Default);
+                var serializerOptions = new JsonSerializerOptions { WriteIndented = true };
+                var jsonString = JsonSerializer.Serialize(finalConfig, serializerOptions);
                 var outputPath = Path.Combine(options.ConfigOutputPath!, ConfigExtension);
 
                 fileSystem.WriteAllText(outputPath, jsonString);
@@ -90,7 +91,7 @@ namespace VSConfigFinder
         /// <returns></returns>
         public static string[] ReadComponents(IFileSystem fileSystem, CommandLineOptions options)
         {
-            var pathsToVsConfigs = fileSystem.GetFileSystemEntries(options.FolderPath!, "*" + ConfigExtension, recursive: true);
+            var pathsToVsConfigs = fileSystem.GetFileSystemEntries(options.FolderPath, "*" + ConfigExtension, recursive: true);
 
             var componentsSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             var serializerOptions = new JsonSerializerOptions
@@ -98,22 +99,13 @@ namespace VSConfigFinder
                 PropertyNameCaseInsensitive = true,
                 AllowTrailingCommas = true,
             };
-            var context = new SourceGenerationContext(serializerOptions);
 
             foreach (var path in pathsToVsConfigs)
             {
                 string[]? components;
                 using (var stream = fileSystem.OpenFile(path))
                 {
-                    var config = JsonSerializer.Deserialize(stream, typeof(VSConfig), context);
-                    if (config is VSConfig vsconfig)
-                    {
-                        components = vsconfig.Components;
-                    }
-                    else
-                    {
-                        throw new ArgumentException("Failed to read components. Please make sure the .vsconfig file input is in the correct format.");
-                    }
+                    components = JsonSerializer.Deserialize<VSConfig>(stream, serializerOptions)?.Components;
                 }
 
                 if (components is not null)
