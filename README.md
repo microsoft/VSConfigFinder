@@ -27,7 +27,7 @@ root
 
 If you want to pass in all the components that are needed to build & run `folderC`, you could run the tool with the following parameters:
 
-`VSConfig.exe --folderpath root\folderC`
+`VSConfigFinder.exe --folderpath root\folderC`
 
 This will generate the following command as a console output that you can simply pass into the installer.
 
@@ -39,7 +39,7 @@ Remember to add your own verb (e.g. `install` or `modify`) in conjunction with t
 
 Say if you want to do something similar to the example above, but you want everything under `folderB` AND `folderC`. You cannot pass in one or the other, because the two do not share a common folder (if you pass in the `root`, `folderA` will also be included). Instead, you can simply pass in the topmost folders as a list to achieve your goal.
 
-`VSConfig.exe --folderpath root\folderC root\folderB`
+`VSConfigFinder.exe --folderpath root\folderC root\folderB`
 
 This will generate the following command as a console output that you can simply pass into the installer.
 
@@ -51,7 +51,7 @@ Again, remember to add your own verb (e.g. `install` or `modify`) in conjunction
 
 Alternatively, you can pass in additional parameters provided by the tool to get the merged `.vsconfig` as a single file:
 
-`VSConfig.exe --folderpath root\folderC --createfile --configoutputpath c:\somefolder`
+`VSConfigFinder.exe --folderpath root\folderC --createfile --configoutputpath c:\somefolder`
 
 This will generate an alternate single `.vsconfig` file with all the needed components in the specified `configOutputPath`. If you don't specify a `configOutputPath`, the output directory will default to the current directory.
 
