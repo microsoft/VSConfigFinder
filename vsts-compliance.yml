@@ -1,6 +1,24 @@
 # Copyright (C) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT license. See LICENSE.txt in the project root for license information.
 
+parameters:
+  - name: BinSkimAllowList
+    type: object
+    default: 
+      - clrgc.dll
+      - clrjit.dll
+      - coreclr.dll
+      - createdump.dll
+      - createdump.exe
+      - hostfxr.dll
+      - hostpolicy.dll
+      - Microsoft.DiaSymReader.Native.amd64.dll
+      - mscordaccore.dll
+      - mscordaccore_amd64_amd64_7.0.323.6910.dll
+      - mscordbi.dll;
+      - msquic.dll;
+      - System.IO.Compression.Native.dll
+
 variables:
   BuildConfiguration: Release
   TeamName: vssetup
@@ -33,13 +51,29 @@ steps:
   parameters:
       BuildConfiguration: $(BuildConfiguration)
 
+- powershell: |
+    $glob = "$(Build.ArtifactStagingDirectory)/**/*.dll;$(Build.ArtifactStagingDirectory)/**/*.exe;"
+    $array = $env:BinSkimAllowList | ConvertFrom-Json
+    $array | ForEach-Object {
+      $file = $_
+      $glob += "-:f|$(Build.ArtifactStagingDirectory)/**/${file};"
+    }
+
+    Write-Host "##vso[task.setvariable variable=BinSkimGlob;]$glob"
+    Write-Host "BinSkim glob: $glob"
+  displayName: Set BinSkim scanning glob
+  env:
+    BinSkimAllowList: ${{ convertToJson(parameters.BinSkimAllowList) }}
+
 - task: BinSkim@4
   displayName: 'Run BinSkim'
   inputs:
     InputType: Basic
     Function: analyze
     TargetPattern: guardianGlob
-    AnalyzeTargetGlob: '$(Build.ArtifactStagingDirectory)\**.dll;$(Build.ArtifactStagingDirectory)\**.exe;-:f|$(Build.ArtifactStagingDirectory)\**clrjit.dll;-:f|$(Build.ArtifactStagingDirectory)\**clrgc.dll;-:f|$(Build.ArtifactStagingDirectory)\**coreclr.dll;-:f|$(Build.ArtifactStagingDirectory)\**hostfxr.dll;-:f|$(Build.ArtifactStagingDirectory)\**hostpolicy.dll;-:f|$(Build.ArtifactStagingDirectory)\**Microsoft.DiaSymReader.Native.amd64.dll;-:f|$(Build.ArtifactStagingDirectory)\**mscordaccore.dll;-:f|$(Build.ArtifactStagingDirectory)\**mscordbi.dll;-:f|$(Build.ArtifactStagingDirectory)\**msquic.dll;-:f|$(Build.ArtifactStagingDirectory)\**System.IO.Compression.Native.dll;-:f|$(Build.ArtifactStagingDirectory)\**createdump.dll;-:f|$(Build.ArtifactStagingDirectory)\**clrgc.dll;-:f|$(Build.ArtifactStagingDirectory)\**mscordaccore_amd64_amd64_7.0.323.6910.dll;-:f|$(Build.ArtifactStagingDirectory)\**createdump.exe'
+    AnalyzeTargetGlob: $(BinSkimGlob)
+    AnalyzeSymPath: 'Srv*http://msdl.microsoft.com/download/symbols'
+    AnalyzeLocalSymbolDirectories: $(Build.ArtifactStagingDirectory)
     AnalyzeVerbose: true
     AnalyzeHashes: true
   continueOnError: true
