@@ -52,11 +52,11 @@ steps:
       BuildConfiguration: $(BuildConfiguration)
 
 - powershell: |
-    $glob = "${env:SYSTEM_DEFAULTWORKINGDIRECTORY}/drop/**/*.dll;${env:SYSTEM_DEFAULTWORKINGDIRECTORY}/drop/**/*.exe;"
+    $glob = "$(Build.ArtifactStagingDirectory)/**/*.dll;$(Build.ArtifactStagingDirectory)/**/*.exe;"
     $array = $env:BinSkimAllowList | ConvertFrom-Json
     $array | ForEach-Object {
       $file = $_
-      $glob += "-:f|${env:SYSTEM_DEFAULTWORKINGDIRECTORY}/drop/**/${file};"
+      $glob += "-:f|$(Build.ArtifactStagingDirectory)/**/${file};"
     }
 
     Write-Host "##vso[task.setvariable variable=BinSkimGlob;]$glob"
@@ -73,7 +73,7 @@ steps:
     TargetPattern: guardianGlob
     AnalyzeTargetGlob: $(BinSkimGlob)
     AnalyzeSymPath: 'Srv*http://msdl.microsoft.com/download/symbols'
-    AnalyzeLocalSymbolDirectories: '$(System.DefaultWorkingDirectory)/drop'
+    AnalyzeLocalSymbolDirectories: $(Build.ArtifactStagingDirectory)
     AnalyzeVerbose: true
     AnalyzeHashes: true
   continueOnError: true
