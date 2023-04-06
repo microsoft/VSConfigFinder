@@ -108,6 +108,7 @@ steps:
 - task: CredScan@2
   displayName: 'Run CredScan'
   inputs:
+    toolMajorVersion: V2
     debugMode: false
 
 - task: PublishSecurityAnalysisLogs@2
