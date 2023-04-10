@@ -5,7 +5,7 @@
     <version>$Version$</version>
     <title>Visual Studio Configuration Finder</title>
     <authors>Microsoft</authors>
-    <owners>Microsoft</owners>
+    <owners>VisualStudioSetup</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://go.microsoft.com/fwlink/?linkid=839265</iconUrl>
     <licenseUrl>https://github.com/Microsoft/VSConfigFinder/tree/$CommitId$/LICENSE.txt</licenseUrl>
