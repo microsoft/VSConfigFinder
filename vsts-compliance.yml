@@ -1,24 +1,6 @@
 # Copyright (C) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT license. See LICENSE.txt in the project root for license information.
 
-parameters:
-  - name: BinSkimAllowList
-    type: object
-    default: 
-      - clrgc.dll
-      - clrjit.dll
-      - coreclr.dll
-      - createdump.dll
-      - createdump.exe
-      - hostfxr.dll
-      - hostpolicy.dll
-      - Microsoft.DiaSymReader.Native.amd64.dll
-      - mscordaccore.dll
-      - mscordaccore_amd64_amd64_7.0.323.6910.dll
-      - mscordbi.dll;
-      - msquic.dll;
-      - System.IO.Compression.Native.dll
-
 variables:
   BuildConfiguration: Release
   TeamName: vssetup
@@ -34,10 +16,6 @@ trigger:
 
 pr: none
 
-queue:
-  name: VSEngSS-MicroBuild2022-1ES
-  timeoutInMinutes: 120
-
 schedules:
 - cron: "0 12 * * 1"
   displayName: 'Run every Monday at 12:00 p.m.'
@@ -46,79 +24,32 @@ schedules:
     - main
   always: true
 
-steps:
-- template: build.yml
+resources:
+  repositories:
+  - repository: MicroBuildTemplate
+    type: git
+    name: 1ESPipelineTemplates/MicroBuildTemplate
+    ref: refs/tags/release
+
+extends:
+  template: azure-pipelines/MicroBuild.1ES.Official.yml@MicroBuildTemplate
   parameters:
-      BuildConfiguration: $(BuildConfiguration)
-
-- powershell: |
-    $glob = "$(Build.ArtifactStagingDirectory)/**/*.dll;$(Build.ArtifactStagingDirectory)/**/*.exe;"
-    $array = $env:BinSkimAllowList | ConvertFrom-Json
-    $array | ForEach-Object {
-      $file = $_
-      $glob += "-:f|$(Build.ArtifactStagingDirectory)/**/${file};"
-    }
-
-    Write-Host "##vso[task.setvariable variable=BinSkimGlob;]$glob"
-    Write-Host "BinSkim glob: $glob"
-  displayName: Set BinSkim scanning glob
-  env:
-    BinSkimAllowList: ${{ convertToJson(parameters.BinSkimAllowList) }}
-
-- task: BinSkim@4
-  displayName: 'Run BinSkim'
-  inputs:
-    InputType: Basic
-    Function: analyze
-    TargetPattern: guardianGlob
-    AnalyzeTargetGlob: $(BinSkimGlob)
-    AnalyzeSymPath: 'Srv*http://msdl.microsoft.com/download/symbols'
-    AnalyzeLocalSymbolDirectories: $(Build.ArtifactStagingDirectory)
-    AnalyzeVerbose: true
-    AnalyzeHashes: true
-  continueOnError: true
-
-- task: ComponentGovernanceComponentDetection@0
-  displayName: 'Run Component Detection'
-  inputs:
-    sourceScanPath: $(Build.SourcesDirectory)
-  continueOnError: True
-
-- task: RoslynAnalyzers@3
-  displayName: 'Run Roslyn Analyzers'
-  inputs:
-    userProvideBuildInfo: auto
-    rulesetName: Recommended
-    rulesetVersion: Latest
-  condition: succeededOrFailed()
-  continueOnError: True
-  env:
-    system_accesstoken: $(System.AccessToken)
-
-- task: PoliCheck@2
-  displayName: 'Run PoliCheck'
-  inputs:
-    targetType: F
-    targetArgument: '$(Build.SourcesDirectory)'
-    optionsFC: 0
-    optionsXS: 1
-    optionsHMENABLE: 0
-  continueOnError: true
-
-- task: CredScan@2
-  displayName: 'Run CredScan'
-  inputs:
-    toolMajorVersion: V2
-    debugMode: false
-
-- task: PublishSecurityAnalysisLogs@2
-  displayName: 'Publish Security Analysis Logs'
-
-- task: PostAnalysis@1
-  displayName: 'Check SDL results'
-  inputs:
-    AllTools: true
-
-- task: MicroBuildCleanup@1
-  displayName: 'Clean up'
-  condition: succeededOrFailed()
+    pool:
+      name: VSEngSS-MicroBuild2022-1ES
+    sdl:
+      sourceAnalysisPool:
+        name: AzurePipelines-EO
+        image: AzurePipelinesWindows2022compliantGPT
+      policheck:
+        enabled: true
+      binskim:
+        enabled: true
+        scanOutputDirectoryOnly: true # BinSkim scans whole source tree but we only need to scan the output dir.
+    stages:
+      - stage: Compliance
+        jobs:
+          - job: Compliance
+            steps:
+              - template: /build.yml@self
+                parameters:
+                  BuildConfiguration: $(BuildConfiguration)

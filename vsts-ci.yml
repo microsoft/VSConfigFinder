@@ -17,25 +17,42 @@ trigger:
 
 pr: none
 
-queue:
-  name: VSEngSS-MicroBuild2019-1ES
-  timeoutInMinutes: 120
+resources:
+  repositories:
+  - repository: MicroBuildTemplate
+    type: git
+    name: 1ESPipelineTemplates/MicroBuildTemplate
+    ref: refs/tags/release
 
-steps:
-- checkout: self
-  fetchDepth: 0 # avoid shallow clone so nbgv can do its work.
-
-- task: MicroBuildSigningPlugin@4
-  inputs:
-    signType: '$(SignType)'
-    feedSource: 'https://devdiv.pkgs.visualstudio.com/DefaultCollection/_packaging/MicroBuildToolset/nuget/v3/index.json'
-  env:
-    TeamName: '$(TeamName)'
-
-- template: build.yml
+extends:
+  template: azure-pipelines/MicroBuild.1ES.Official.yml@MicroBuildTemplate
   parameters:
-      BuildConfiguration: $(BuildConfiguration)
+    pool:
+      name: VSEngSS-MicroBuild2022-1ES
+    sdl:
+      sourceAnalysisPool:
+        name: AzurePipelines-EO
+        image: AzurePipelinesWindows2022compliantGPT
+      policheck:
+        enabled: true
+      binskim:
+        enabled: true
+        scanOutputDirectoryOnly: true # BinSkim scans whole source tree but we only need to scan the output dir.
 
-- task: ms-vseng.MicroBuildTasks.521a94ea-9e68-468a-8167-6dcf361ea776.MicroBuildCleanup@1
-  displayName: Clean up
-  condition: succeededOrFailed()
+    stages:
+      - stage: Build
+        jobs:
+          - job: Build
+            templateContext:
+              mb:
+                signing:
+                  enabled: true
+                  signType: $(SignType)
+
+            steps:
+              - checkout: self
+                fetchDepth: 0 # avoid shallow clone so nbgv can do its work.
+
+              - template: /build.yml@self
+                parameters:
+                  BuildConfiguration: $(BuildConfiguration)

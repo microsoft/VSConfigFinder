@@ -5,49 +5,48 @@ parameters:
   BuildConfiguration: Release
 
 steps:
-- task: UseDotNet@2
-  displayName: 'Install .NET Core SDK'
-  inputs:
-    useGlobalJson: true
-    
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    command: 'build'
-    projects: 'VSConfigFinder'
-    arguments: '--configuration $(BuildConfiguration)'
+  - task: UseDotNet@2
+    displayName: 'Install .NET Core SDK'
+    inputs:
+      useGlobalJson: true
+      
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      command: 'build'
+      projects: 'VSConfigFinder'
+      arguments: '--configuration $(BuildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: Test
-  inputs:
-    command: 'test'
-    projects: 'VSConfigFinder.Test'
-    arguments: '--configuration $(BuildConfiguration)'
+  - task: DotNetCoreCLI@2
+    displayName: Test
+    inputs:
+      command: 'test'
+      projects: 'VSConfigFinder.Test'
+      arguments: '--configuration $(BuildConfiguration)'
 
-- task: DotNetCoreCLI@2
-  displayName: Publish
-  inputs:
-    command: 'publish'
-    arguments: '--no-build --configuration $(BuildConfiguration)'
-    publishWebProjects: false
-    zipAfterPublish: false
+  - task: DotNetCoreCLI@2
+    displayName: Publish
+    inputs:
+      command: 'publish'
+      arguments: '--no-build --configuration $(BuildConfiguration)'
+      publishWebProjects: false
+      zipAfterPublish: false
 
-- script: |
-    choco pack pkg\VSConfigFinder\VSConfigFinder.nuspec --out "VSConfigFinder\bin\${{ parameters.BuildConfiguration }}" --version "$(GitBuildVersion)" "Configuration=${{ parameters.BuildConfiguration }}" "CommitId=$(Build.SourceVersion)" "Tag=$(Build.BuildNumber)"
-  displayName: 'Package Nupkg'
-  workingDirectory: $(Build.SourcesDirectory)
+  - script: |
+      choco pack pkg\VSConfigFinder\VSConfigFinder.nuspec --out "VSConfigFinder\bin\${{ parameters.BuildConfiguration }}" --version "$(GitBuildVersion)" "Configuration=${{ parameters.BuildConfiguration }}" "CommitId=$(Build.SourceVersion)" "Tag=$(Build.BuildNumber)"
+    displayName: 'Package Nupkg'
+    workingDirectory: $(Build.SourcesDirectory)
 
-- task: CopyFiles@2
-  displayName: 'Copy build artifacts'
-  inputs:
-    SourceFolder: $(Build.SourcesDirectory)\VSConfigFinder
-    Contents: |
-     bin\$(BuildConfiguration)\**
-    TargetFolder: $(Build.ArtifactStagingDirectory)\out
+  - task: CopyFiles@2
+    displayName: 'Copy build artifacts'
+    inputs:
+      SourceFolder: $(Build.SourcesDirectory)\VSConfigFinder
+      Contents: |
+        bin\$(BuildConfiguration)\**
+      TargetFolder: $(Build.ArtifactStagingDirectory)\out
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish build artifacts'
-  inputs:
-    PathtoPublish: $(Build.ArtifactStagingDirectory)\out
-    ArtifactName: drop
-    publishLocation: Container
+  - task: 1ES.PublishPipelineArtifact@1
+    displayName: 'Publish build artifacts'
+    inputs:
+      targetPath: $(Build.ArtifactStagingDirectory)\out
+      artifactName: drop
