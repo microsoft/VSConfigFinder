@@ -32,12 +32,16 @@ extends:
     sdl:
       sourceAnalysisPool:
         name: AzurePipelines-EO
-        image: AzurePipelinesWindows2022compliantGPT
+        image: 1ESPT-Windows2022
       policheck:
         enabled: true
       binskim:
         enabled: true
         scanOutputDirectoryOnly: true # BinSkim scans whole source tree but we only need to scan the output dir.
+      tsa:
+        enabled: true
+        configFile: $(Build.SourcesDirectory)\.config\tsaoptions.json
+        onboard: false # We already onboarded
 
     stages:
       - stage: Build
