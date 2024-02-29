@@ -2,8 +2,12 @@
 # Licensed under the MIT license. See LICENSE.txt in the project root for license information.
 
 variables:
-  BuildConfiguration: Release
-  TeamName: vssetup
+- group: vssetup-apiscan
+- group: vssetup-apiscan-secrets
+- name: BuildConfiguration
+  value: Release
+- name: TeamName
+  value: vssetup
 
 trigger:
   batch: true
@@ -26,25 +30,43 @@ schedules:
 
 resources:
   repositories:
-  - repository: MicroBuildTemplate
-    type: git
-    name: 1ESPipelineTemplates/MicroBuildTemplate
-    ref: refs/tags/release
+    - repository: MicroBuildTemplate
+      type: git
+      name: 1ESPipelineTemplates/MicroBuildTemplate
+      ref: refs/tags/release
 
 extends:
-  template: azure-pipelines/MicroBuild.1ES.Official.yml@MicroBuildTemplate
+  template: azure-pipelines/MicroBuild.1ES.Unofficial.yml@MicroBuildTemplate
   parameters:
     pool:
       name: VSEngSS-MicroBuild2022-1ES
     sdl:
       sourceAnalysisPool:
         name: AzurePipelines-EO
-        image: AzurePipelinesWindows2022compliantGPT
-      policheck:
+        image: 1ESPT-Windows2022
+      antimalwareScan:
+        enabled: true
+      armory:
         enabled: true
       binskim:
         enabled: true
-        scanOutputDirectoryOnly: true # BinSkim scans whole source tree but we only need to scan the output dir.
+        scanOutputDirectoryOnly: true
+      codeql:
+        compiled:
+          enabled: true
+      credscan:
+        enabled: true
+      policheck:
+        enabled: true
+      psscriptanalyzer:
+        enabled: true
+      prefast:
+        enabled: true
+      tsa:
+        enabled: true
+        configFile: $(Build.SourcesDirectory)\.config\tsaoptions.json
+        onboard: false # We already onboarded
+
     stages:
       - stage: Compliance
         jobs:
@@ -53,3 +75,47 @@ extends:
               - template: /build.yml@self
                 parameters:
                   BuildConfiguration: $(BuildConfiguration)
+
+              - task: CopyFiles@2
+                displayName: Copy files for API scan
+                inputs:
+                  SourceFolder: $(Build.SourcesDirectory)\VSConfigFinder\bin\$(BuildConfiguration)
+                  Contents: |
+                    **\VSConfigFinder.?(pdb|dll|xml)
+                    **\CommandLine.?(pdb|dll|xml)
+                    !**\*.Test.*
+                  TargetFolder: $(Build.StagingDirectory)\apiscan-inputs
+
+              - task: APIScan@2
+                displayName: Run APIScan
+                inputs:
+                  softwareFolder: $(Build.StagingDirectory)\apiscan-inputs
+                  softwareName: 'Microsoft.VSConfigFinder'
+                  softwareVersionNum: '1'
+                  toolVersion: Latest
+                env:
+                  AzureServicesAuthConnectionString: runAs=App;AppId=$(ApiScanClientId);TenantId=$(ApiScanTenant);AppKey=$(SetupAppApiScanSecret)
+
+              - task: PublishSecurityAnalysisLogs@3
+                displayName: Publish 'SDLAnalysis-APIScan' artifact
+                condition: succeededOrFailed()
+                inputs:
+                  ArtifactName: SDLAnalysis-APIScan
+                  AllTools: false
+                  APIScan: true
+
+              - task: PostAnalysis@2
+                displayName: Post Analysis
+                inputs:
+                  GdnBreakAllTools: false
+                  GdnBreakGdnToolApiScan: true
+                
+              - task: TSAUpload@2
+                displayName: Upload APIScan results to TSA
+                inputs:
+                  GdnPublishTsaOnboard: false
+                  GdnPublishTsaConfigFile: '$(Build.SourcesDirectory)\.config\tsaoptions.json'
+                  GdnPublishTsaExportedResultsPublishable: true
+                continueOnError: true
+                condition: succeededOrFailed()
+                enabled: true
