@@ -52,6 +52,7 @@ extends:
                 signing:
                   enabled: true
                   signType: $(SignType)
+                  signWithProd: true
 
             steps:
               - checkout: self
