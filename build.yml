@@ -16,7 +16,7 @@ steps:
       command: 'restore'
       projects: 'VSConfigFinder'
       feedsToUse: 'select'
-      vstsFeed: 'DevDiv/Setup-Dependencies'
+      vstsFeed: 'Setup-Dependencies'
       includeNuGetOrg: false
       
   - task: DotNetCoreCLI@2
@@ -32,7 +32,7 @@ steps:
       command: 'restore'
       projects: 'VSConfigFinder.Test'
       feedsToUse: 'select'
-      vstsFeed: 'DevDiv/Setup-Dependencies'
+      vstsFeed: 'Setup-Dependencies'
       includeNuGetOrg: false
 
   - task: DotNetCoreCLI@2
