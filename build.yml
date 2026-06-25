@@ -26,13 +26,13 @@ steps:
       projects: 'VSConfigFinder'
       arguments: '--configuration $(BuildConfiguration) --no-restore'
 
-   - task: DotNetCoreCLI@2
-     displayName: Restore Test
-     inputs:
+  - task: DotNetCoreCLI@2
+    displayName: Restore Test
+    inputs:
       command: 'restore'
       projects: 'VSConfigFinder.Test'
       feedsToUse: 'select'
-      vstsFeed: 'Setup-Dependencies'
+      vstsFeed: 'DevDiv/Setup-Dependencies'
       includeNuGetOrg: false
 
   - task: DotNetCoreCLI@2
