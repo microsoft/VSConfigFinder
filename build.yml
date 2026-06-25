@@ -11,18 +11,36 @@ steps:
       useGlobalJson: true
       
   - task: DotNetCoreCLI@2
+    displayName: Restore Build
+    inputs:
+      command: 'restore'
+      projects: 'VSConfigFinder'
+      feedsToUse: 'select'
+      vstsFeed: 'DevDiv/Setup-Dependencies'
+      includeNuGetOrg: false
+      
+  - task: DotNetCoreCLI@2
     displayName: Build
     inputs:
       command: 'build'
       projects: 'VSConfigFinder'
-      arguments: '--configuration $(BuildConfiguration)'
+      arguments: '--configuration $(BuildConfiguration) --no-restore'
+
+   - task: DotNetCoreCLI@2
+     displayName: Restore Test
+     inputs:
+      command: 'restore'
+      projects: 'VSConfigFinder.Test'
+      feedsToUse: 'select'
+      vstsFeed: 'Setup-Dependencies'
+      includeNuGetOrg: false
 
   - task: DotNetCoreCLI@2
     displayName: Test
     inputs:
       command: 'test'
       projects: 'VSConfigFinder.Test'
-      arguments: '--configuration $(BuildConfiguration)'
+      arguments: '--configuration $(BuildConfiguration) --no-restore'
 
   - task: DotNetCoreCLI@2
     displayName: Publish
