@@ -15,9 +15,8 @@ steps:
     inputs:
       command: 'restore'
       projects: 'VSConfigFinder'
-      feedsToUse: 'select'
-      vstsFeed: 'Setup-Dependencies'
-      includeNuGetOrg: false
+      feedsToUse: 'config'
+      nugetConfigPath: 'nuget.config'
       
   - task: DotNetCoreCLI@2
     displayName: Build
@@ -31,9 +30,8 @@ steps:
     inputs:
       command: 'restore'
       projects: 'VSConfigFinder.Test'
-      feedsToUse: 'select'
-      vstsFeed: 'Setup-Dependencies'
-      includeNuGetOrg: false
+      feedsToUse: 'config'
+      nugetConfigPath: 'nuget.config'
 
   - task: DotNetCoreCLI@2
     displayName: Test
