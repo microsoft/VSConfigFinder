@@ -26,7 +26,7 @@ steps:
     inputs:
       command: 'build'
       projects: 'VSConfigFinder'
-      arguments: '--configuration $(BuildConfiguration) --no-restore --configfile $(Build.SourcesDirectory)/build/nuget.config'
+      arguments: '--configuration $(BuildConfiguration) --no-restore --configfile $(Build.SourcesDirectory)\build\nuget.config'
 
   - task: DotNetCoreCLI@2
     displayName: Restore Test
@@ -41,7 +41,7 @@ steps:
     inputs:
       command: 'test'
       projects: 'VSConfigFinder.Test'
-      arguments: '--configuration $(BuildConfiguration) --no-restore -p:RestoreConfigFile=$(Build.SourcesDirectory)/build/nuget.config'
+      arguments: '--configuration $(BuildConfiguration) --no-restore -p:RestoreConfigFile=$(Build.SourcesDirectory)\build\nuget.config'
 
   - task: DotNetCoreCLI@2
     displayName: Publish
