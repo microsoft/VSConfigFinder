@@ -19,14 +19,14 @@ steps:
       command: 'restore'
       projects: 'VSConfigFinder'
       feedsToUse: 'config'
-      nugetConfigPath: '$(Build.SourcesDirectory)\build\nuget.config'
+      nugetConfigPath: '$(Build.SourcesDirectory)\nuget.config'
       
   - task: DotNetCoreCLI@2
     displayName: Build
     inputs:
       command: 'build'
       projects: 'VSConfigFinder'
-      arguments: '--configuration $(BuildConfiguration) --no-restore --configfile $(Build.SourcesDirectory)\build\nuget.config'
+      arguments: '--configuration $(BuildConfiguration) --no-restore --configfile $(Build.SourcesDirectory)\nuget.config'
 
   - task: DotNetCoreCLI@2
     displayName: Restore Test
@@ -34,14 +34,14 @@ steps:
       command: 'restore'
       projects: 'VSConfigFinder.Test'
       feedsToUse: 'config'
-      nugetConfigPath: '$(Build.SourcesDirectory)\build\nuget.config'
+      nugetConfigPath: '$(Build.SourcesDirectory)\nuget.config'
 
   - task: DotNetCoreCLI@2
     displayName: Test
     inputs:
       command: 'test'
       projects: 'VSConfigFinder.Test'
-      arguments: '--configuration $(BuildConfiguration) --no-restore -p:RestoreConfigFile=$(Build.SourcesDirectory)\build\nuget.config'
+      arguments: '--configuration $(BuildConfiguration) --no-restore -p:RestoreConfigFile=$(Build.SourcesDirectory)\nuget.config'
 
   - task: DotNetCoreCLI@2
     displayName: Publish
