@@ -31,7 +31,7 @@ jobs:
         global-json-file: global.json
     
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore --source https://api.nuget.org/v3/index.json
     
     - name: Build
       run: dotnet build --no-restore --configuration ${{ env.BUILD_CONFIGURATION }} ${{ env.PROJECT_PATH }}
