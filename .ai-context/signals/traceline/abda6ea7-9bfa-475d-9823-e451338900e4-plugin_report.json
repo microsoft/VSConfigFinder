@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.3",
+  "signal_type": "traceline_usage",
+  "timestamp_utc": "2026-10-01T03:28:28.6594204Z",
+  "run_id": "abda6ea7-9bfa-475d-9823-e451338900e4",
+  "action": "complete",
+  "agent_name": "s360-breeze-orchestrator",
+  "invoked_skills": [
+    "s360-breeze-reader",
+    "sfi-es424-default-deny",
+    "alas-signal-capture",
+    "remediation-review",
+    "signal-sidecar-dispatch",
+    "traceline"
+  ],
+  "plugin_name": "s360-breeze-toolkit",
+  "plugin_version": "2.16.1",
+  "plugin_channel": "local",
+  "plugin_source": "marketplace",
+  "plugin_owner_team": "Jean-Marc Prieur, OSS Supply Chain AI Devs",
+  "plugin_capability_area": [
+    "compliance",
+    "security"
+  ],
+  "skill_used": "sfi-es424-default-deny",
+  "skill_version": "Unavailable",
+  "skill_type": "remediation",
+  "skill_entrypoint": "routed",
+  "skill_owner": "s360-breeze-toolkit",
+  "skill_namespace": "s360-breeze-toolkit:sfi-es424-default-deny",
+  "skills_used": [
+    "s360-breeze-reader",
+    "sfi-es424-default-deny",
+    "alas-signal-capture",
+    "remediation-review",
+    "signal-sidecar-dispatch",
+    "traceline"
+  ],
+  "event_type": "plugin_report",
+  "session_phase": "plugin_report",
+  "mode": "interactive",
+  "dispatch_mode": "live",
+  "execution_attribution": {
+    "configured_model": "gpt-5.6-sol",
+    "observed_model": null,
+    "configured_reasoning_effort": "platform_default",
+    "observed_reasoning_effort": null
+  },
+  "outcome": "completed",
+  "user_id": "Unavailable",
+  "kpi_context": {
+    "kpi_id": "ES4.2.4",
+    "kpi_family": "ES",
+    "program": "SFI",
+    "action_items": [
+      {
+        "id": "fff13650-7a5c-4b81-8222-b0cd7c057680:cc3aa911c1bbb548f11c6bbfee0831c623560cf5d8c93d9987a1ec56280befdb",
+        "kpi_id": "0f27291c-bc52-49fa-a978-7b4a9c362107",
+        "target_id": "fff13650-7a5c-4b81-8222-b0cd7c057680"
+      }
+    ]
+  },
+  "route_info": {
+    "orchestrator_route": "dedicated_skill",
+    "route_reason": "exact_action_subtype_match",
+    "fallback_used": false,
+    "fallback_type": "none"
+  },
+  "change_metrics": {
+    "files_changed_count": 1,
+    "estimated_loc_delta_bucket": "1-50",
+    "artifacts_touched": [
+      "config"
+    ]
+  },
+  "approval_flow": {
+    "proposal_accepted": true,
+    "proposal_modified": false,
+    "modification_reason_code": null
+  },
+  "pr": {
+    "created": false,
+    "provider": null,
+    "url": null,
+    "id": null,
+    "title": null,
+    "repository": "microsoft/VSConfigFinder",
+    "branch": "sfi/es4.2.4/default-deny-18148"
+  },
+  "pr_outcome": {
+    "pr_created": false,
+    "pr_merged": null,
+    "time_to_merge_bucket": null,
+    "review_rounds_bucket": null
+  },
+  "execution_reliability": {
+    "tool_failures_count": 1,
+    "retry_count": 1,
+    "hub_dispatch_status": "pending",
+    "error_category": "none",
+    "hub_issue_url": null,
+    "hub_dispatch_error_reason": "none",
+    "hub_dispatch_error_message": null,
+    "hub_dispatch_error_operation": null
+  },
+  "signal_quality": {
+    "completeness_score": 0.98,
+    "dedupe_key": "abda6ea7-9bfa-475d-9823-e451338900e4|sfi-es424-default-deny|plugin_report|complete",
+    "is_partial_signal": false,
+    "ignored_input_fields_count": 0
+  },
+  "user_intent": {
+    "intent_category": "new_fix",
+    "interaction_mode": "direct_command"
+  },
+  "privacy_controls": {
+    "user_opt_out": false,
+    "redaction_applied": false,
+    "data_classification": "non_sensitive"
+  },
+  "notes": "Default-deny policy remediation applied to the targeted pipeline configuration; branch validation remains developer-owned.",
+  "session_id": "84cf5b6c-1e49-4ae6-8c02-ea7576da28c7"
+}
