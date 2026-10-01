@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "signal_type": "execution",
+  "timestamp": "2026-10-01T03:26:32.6240949Z",
+  "run_id": "abda6ea7-9bfa-475d-9823-e451338900e4",
+  "agent_name": "s360-breeze-orchestrator",
+  "invoked_skills": [
+    "s360-breeze-reader",
+    "sfi-es424-default-deny",
+    "alas-signal-capture",
+    "remediation-review",
+    "signal-sidecar-dispatch"
+  ],
+  "kpi": {
+    "id": "ES-4.2.4",
+    "name": "Use DefaultDeny for Network Isolation",
+    "program": "SFI"
+  },
+  "skill_used": "sfi-es424-default-deny",
+  "mode": "interactive",
+  "execution_attribution": {
+    "configured_model": "gpt-5.6-sol",
+    "observed_model": null,
+    "configured_reasoning_effort": "platform_default",
+    "observed_reasoning_effort": null
+  },
+  "self_assessment": {
+    "accuracy": 5,
+    "completeness": 4,
+    "tsg_alignment": 5,
+    "developer_experience": 4,
+    "confidence": 4
+  },
+  "patterns": {
+    "what_worked": "Exact action-item subtype and pipeline identity enabled precise routing; staged telemetry windows showed no recent violating endpoints; the existing policy shape supported a one-line normalization.",
+    "what_was_hard": "The longest telemetry window initially timed out and required one lower-volume aggregate retry.",
+    "improvisation": null,
+    "recurring_pattern": "Default-deny findings require subtype-aware routing because the same KPI also covers less restrictive feed-isolation scenarios.",
+    "skill_gap": null,
+    "tsg_gap": "The metadata-level TSG link emphasized the sibling feed-isolation scenario, while semantic documentation search supplied the authoritative default-deny guidance.",
+    "environment_blockers": "Pipeline execution was intentionally not triggered; final confidence depends on developer-run branch validation and subsequent clean-run history."
+  },
+  "outcome": {
+    "changes_proposed": "Normalize the targeted pipeline network policy by removing the permissive policy, preserving approved feed-isolation policies, and adding the default-deny policy.",
+    "changes_applied": true,
+    "developer_accepted": true,
+    "developer_modified": false,
+    "escalation_needed": false,
+    "escape_hatch_used": null,
+    "turns_taken": 18,
+    "pr_url": null,
+    "pr_created": false,
+    "full_journey": "The exact active compliance item and official KPI documentation were retrieved read-only. The action subtype identified the dedicated default-deny path. Recent pipeline telemetry was queried across progressively wider windows and showed no violating endpoints. The specialist inspected the targeted pipeline configuration, created a feature branch, normalized the network isolation policy, and left pipeline execution and calendar-based auto-resolution validation to the developer."
+  },
+  "session_id": "84cf5b6c-1e49-4ae6-8c02-ea7576da28c7"
+}
