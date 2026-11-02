@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "signal_type": "execution",
+  "timestamp": "2026-11-02T20:28:11.6349284Z",
+  "run_id": "d27857d3-474b-4f3b-ad6b-77db3feadf57",
+  "session_run_id": "b7b9c8f4-f5a9-4680-8176-e6cc25f94a9f",
+  "agent_name": "s360-breeze-orchestrator",
+  "invoked_skills": [
+    "fetch-ado-cg-alert",
+    "environment-probe-skill",
+    "alert-triage-skill",
+    "repo-analysis-skill",
+    "dotnet-sdk-skill",
+    "configure-dotnet-sdk",
+    "remediation-review",
+    "traceline",
+    "signal-sidecar-dispatch",
+    "s360-breeze-reader",
+    "verification-skill"
+  ],
+  "kpi": {
+    "program": "SFI",
+    "id": "ES5.2",
+    "name": "1ES Open Source Vulnerabilities"
+  },
+  "skill_used": "dotnet-sdk-skill",
+  "mode": "interactive",
+  "dev_feedback": {
+    "question_scope": "session",
+    "rating": null,
+    "question_id": "human_feedback_v1",
+    "prompt_variant": "result",
+    "asked": true,
+    "freetext_routed": "none",
+    "rating_scale": "1-5",
+    "arm": "dedicated_skill"
+  },
+  "self_assessment": {
+    "accuracy": 4,
+    "confidence": 4,
+    "completeness": 4,
+    "tsg_alignment": 4,
+    "developer_experience": 2
+  },
+  "patterns": {
+    "what_worked": "Using the configured Azure Artifacts feed restored both projects; the patched SDK built successfully and all six tests passed. An exact-scope draft PR was published.",
+    "improvisation": null,
+    "skill_gap": null,
+    "tsg_gap": null,
+    "what_was_hard": "Two GitHub account contexts and missing organization SSO authorization initially prevented publication; an unnecessary public-feed override caused the original restore blocker.",
+    "recurring_pattern": null,
+    "environment_blockers": "Resolved by using the existing configured feed and the appropriate SSO-authorized publishing credential. Direct public-feed TLS remains unavailable but is not required for this fix."
+  },
+  "outcome": {
+    "full_journey": "A CG SDK finding was routed to dedicated dependency remediation. An exact recommended SDK patch was applied in [repo]. Initial public-feed TLS and publishing failures blocked completion. The developer established an appropriate organization SSO session. Production S360 context confirmed the exact action and guidance. Restore succeeded using the existing private feed without changing configuration, the application built and all six tests passed. Deterministic scope verification confirmed only the SDK pin changed. A commit and draft PR were published and their remote identity and one-file scope verified. No merge or completion of the S360 item was claimed. Feedback had already been offered and skipped.",
+    "pr_url": "https://github.com/microsoft/VSConfigFinder/pull/83",
+    "turns_taken": 8,
+    "escape_hatch_used": null,
+    "developer_modified": false,
+    "pr_created": true,
+    "escalation_needed": false,
+    "changes_proposed": "Update the .NET SDK pin from 10.0.401 to the CG recommended 10.0.403.",
+    "changes_applied": true,
+    "cold_review": {
+      "enabled": false
+    },
+    "developer_accepted": false
+  },
+  "session_id": "09c75be5-2f64-4963-9eca-6837f12399b8"
+}

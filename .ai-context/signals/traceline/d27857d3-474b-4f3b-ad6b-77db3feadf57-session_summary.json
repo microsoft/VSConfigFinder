@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.3",
+  "signal_type": "traceline_usage",
+  "timestamp_utc": "2026-11-02T20:28:15.0833628Z",
+  "run_id": "d27857d3-474b-4f3b-ad6b-77db3feadf57",
+  "session_run_id": "b7b9c8f4-f5a9-4680-8176-e6cc25f94a9f",
+  "action": "complete",
+  "agent_name": "s360-breeze-orchestrator",
+  "invoked_skills": [
+    "fetch-ado-cg-alert",
+    "environment-probe-skill",
+    "alert-triage-skill",
+    "repo-analysis-skill",
+    "dotnet-sdk-skill",
+    "configure-dotnet-sdk",
+    "remediation-review",
+    "traceline",
+    "signal-sidecar-dispatch",
+    "s360-breeze-reader",
+    "verification-skill"
+  ],
+  "plugin_name": "s360-breeze-toolkit",
+  "plugin_version": "2.18.0",
+  "plugin_channel": "playground",
+  "plugin_source": "marketplace",
+  "plugin_owner_team": "OSS Supply Chain AI Devs",
+  "plugin_capability_area": [
+    "compliance",
+    "security",
+    "engineering-systems"
+  ],
+  "skill_used": "Unavailable",
+  "skill_version": "Unavailable",
+  "skill_type": "reporting",
+  "skill_entrypoint": "routed",
+  "skill_owner": "s360-breeze-toolkit",
+  "skill_namespace": "s360-breeze-toolkit:session_summary",
+  "event_type": "session_summary",
+  "session_phase": "plugin_report",
+  "mode": "interactive",
+  "dispatch_mode": "live",
+  "user_id": "f1294775-8692-4da8-b7e0-476d90d0053f",
+  "outcome": "completed",
+  "kpi_context": {
+    "program": "SFI",
+    "action_items": [
+      {
+        "kpi_id": "928b7015-db58-41a3-94ea-ab73c7bb9f4d",
+        "id": "fff13650-7a5c-4b81-8222-b0cd7c057680_b2a48f4b49e9e8ccc265b7b74eff6e48ab3683cca826625bc4435769fe476fea",
+        "target_id": "fff13650-7a5c-4b81-8222-b0cd7c057680"
+      }
+    ],
+    "kpi_id": "SFI-ES5.2",
+    "kpi_family": "ES"
+  },
+  "change_metrics": {
+    "files_changed_count": 1,
+    "artifacts_touched": [
+      "config"
+    ],
+    "estimated_loc_delta_bucket": "1-50"
+  },
+  "pr": {
+    "repository": "microsoft/VSConfigFinder",
+    "created": true,
+    "branch": "cg-fix/17985435",
+    "provider": "GitHub",
+    "id": 83,
+    "url": "https://github.com/microsoft/VSConfigFinder/pull/83"
+  },
+  "notes": "Resumed remediation completed: restore using the existing private feed, build and six tests passed; draft PR created. Production S360 finding attribution confirmed.",
+  "skills_used": [
+    "fetch-ado-cg-alert",
+    "environment-probe-skill",
+    "alert-triage-skill",
+    "repo-analysis-skill",
+    "dotnet-sdk-skill",
+    "configure-dotnet-sdk",
+    "remediation-review",
+    "traceline",
+    "signal-sidecar-dispatch",
+    "s360-breeze-reader",
+    "verification-skill"
+  ],
+  "session_id": "09c75be5-2f64-4963-9eca-6837f12399b8"
+}
