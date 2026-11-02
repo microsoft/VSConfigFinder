@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "signal_type": "execution",
+  "timestamp": "2026-11-02T19:46:25.8060541Z",
+  "run_id": "b7b9c8f4-f5a9-4680-8176-e6cc25f94a9f",
+  "session_run_id": "b7b9c8f4-f5a9-4680-8176-e6cc25f94a9f",
+  "agent_name": "s360-breeze-orchestrator",
+  "invoked_skills": [
+    "fetch-ado-cg-alert",
+    "environment-probe-skill",
+    "alert-triage-skill",
+    "repo-analysis-skill",
+    "dotnet-sdk-skill",
+    "configure-dotnet-sdk",
+    "remediation-review",
+    "traceline",
+    "signal-sidecar-dispatch"
+  ],
+  "kpi": {
+    "name": "1ES Open Source Vulnerabilities",
+    "id": "ES5.2",
+    "program": "SFI"
+  },
+  "skill_used": "dependabot:dependency-update-orchestrator",
+  "mode": "interactive",
+  "execution_attribution": {
+    "observed_model": "gpt-6.1-sol",
+    "configured_reasoning_effort": "platform_default",
+    "observed_reasoning_effort": null,
+    "configured_model": "gpt-5.6-sol"
+  },
+  "dev_feedback": {
+    "rating_scale": "1-5",
+    "prompt_variant": "result",
+    "freetext_routed": "none",
+    "rating": null,
+    "question_id": "human_feedback_v1",
+    "arm": "dedicated_skill",
+    "question_scope": "session",
+    "asked": true
+  },
+  "self_assessment": {
+    "completeness": 2,
+    "tsg_alignment": 4,
+    "developer_experience": 2,
+    "confidence": 3,
+    "accuracy": 4
+  },
+  "patterns": {
+    "tsg_gap": null,
+    "what_was_hard": "NuGet TLS handshake failure prevented restore; GitHub authentication prevented publication.",
+    "improvisation": null,
+    "recurring_pattern": null,
+    "what_worked": "Authoritative CG recommendation matched the installed replacement SDK; only the SDK pin changed.",
+    "environment_blockers": "NU1301 HandshakeFailure; noninteractive GitHub credentials unavailable.",
+    "skill_gap": null
+  },
+  "outcome": {
+    "changes_proposed": "Update the .NET SDK pin from 10.0.401 to the CG recommended 10.0.403.",
+    "cold_review": {
+      "enabled": false
+    },
+    "pr_url": null,
+    "full_journey": "Developer supplied a CG alert; no S360 query was needed. Dedicated dependency orchestration ran environment probe, alert retrieval, triage, repository analysis, SDK remediation and SDK configuration. CG recommended 10.0.403. A single SDK pin was changed in [repo] on a working branch. JSON and diff checks passed and SDK resolution returned the fixed version. Build required restore, which failed with a TLS handshake error; tests and independent validation were not reached. Push authentication was unavailable. No remediation commit or PR was created. Developer skipped optional feedback.",
+    "developer_modified": false,
+    "pr_created": false,
+    "turns_taken": 1,
+    "changes_applied": true,
+    "developer_accepted": false,
+    "escape_hatch_used": null,
+    "escalation_needed": true
+  },
+  "session_id": "09c75be5-2f64-4963-9eca-6837f12399b8"
+}
